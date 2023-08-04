@@ -11,4 +11,9 @@ export class UsersService {
         const user = await this.userRepository.create(dto);
         return user;
     }
+
+    async getUserByLogin(login) {
+        const user = await this.userRepository.findOne({where: {login}, include: {all: true}})
+        return user;
+    }
 }

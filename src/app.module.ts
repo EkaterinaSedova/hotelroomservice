@@ -13,6 +13,9 @@ import { RoomsModule } from './rooms/rooms.module';
 import { BookingsModule } from './bookings/bookings.module';
 import {Room} from "./rooms/room.model";
 import {Booking} from "./bookings/booking.model";
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -34,6 +37,7 @@ import {Booking} from "./bookings/booking.model";
     FeedbacksModule,
     RoomsModule,
     BookingsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

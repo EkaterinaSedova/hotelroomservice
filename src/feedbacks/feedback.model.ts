@@ -19,10 +19,10 @@ export class Feedback extends Model<Feedback, FeedbackCreationAttrs> {
     message: string;
 
     @ForeignKey(() => User)
-    @Column({type: DataType.INTEGER})
+    @Column({type: DataType.INTEGER, field: "user_id"})
     userId: number;
 
     @ForeignKey(() => Hotel)
-    @Column({type: DataType.INTEGER})
+    @Column({type: DataType.INTEGER, field: 'hotel_id'})
     hotelId: number;
 }

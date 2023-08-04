@@ -10,9 +10,12 @@ export class Room extends Model<Room, RoomCreationAttrs> {
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;
 
+    @Column({type: DataType.JSONB})
+    options;
+
 
     @ForeignKey(() => Hotel)
-    @Column({type: DataType.INTEGER})
+    @Column({type: DataType.INTEGER, field: 'hotel_id'})
     hotelId: number;
 
     @HasMany(() => Booking)

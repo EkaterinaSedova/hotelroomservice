@@ -5,7 +5,7 @@ interface UserCreationAttrs {
     login: string;
     password: string;
     name: string;
-    isAdmin: string;
+    isAdmin: boolean;
 }
 
 @Table({tableName: 'users', updatedAt: false, createdAt: false})
@@ -21,6 +21,9 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @Column({type: DataType.STRING, allowNull: false})
     name: string;
+
+    @Column({type: DataType.BOOLEAN, allowNull: false, field: 'is_admin'})
+    isAdmin: boolean;
 
     @HasMany(() => Feedback)
     feedbacks: Feedback[];

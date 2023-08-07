@@ -1,5 +1,12 @@
-import {Body, Controller, Post} from '@nestjs/common';
-import {ApiCreatedResponse, ApiOperation, ApiTags} from "@nestjs/swagger";
+import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {
+    ApiBadRequestResponse,
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiTags
+} from "@nestjs/swagger";
 import {UsersService} from "./users.service";
 import {User} from "./user.model";
 import {CreateUserDto} from "./dto/create-user.dto";
@@ -15,5 +22,23 @@ export class UsersController {
     @Post()
     create(@Body() userDto: CreateUserDto) {
         return this.usersService.createUser(userDto);
+    }
+
+    @ApiOperation({
+        summary: 'Get user by ID'
+    })
+    @ApiOkResponse({
+        description: 'Success'
+    })
+    @ApiBadRequestResponse({
+        description: 'Bad request: user not found'
+    })
+    @ApiParam({
+        name: 'id',
+        description: 'Gets the user id',
+    })
+    @Get('/:id')
+    getUserById(@Param() params: any) {
+        return this.usersService.getUserById(params.id);
     }
 }

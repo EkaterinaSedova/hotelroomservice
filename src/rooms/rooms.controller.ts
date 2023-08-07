@@ -24,8 +24,8 @@ export class RoomsController {
         description: 'Current page',
     })
     @Get('/page/:page')
-    getUserById(@Param() params: any, @Query() query: any) {
-        return this.roomsService.getAll(params, query);
+    getRooms(@Param() params: any, @Query() query: any) {
+        return this.roomsService.getAllRooms(params, query);
     }
 
 }

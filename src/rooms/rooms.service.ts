@@ -14,7 +14,7 @@ export class RoomsService {
         return room;
     }
 
-    async getAll(params, query) {
+    async getAllRooms(params, query) {
         const limit = 2;
         const places = query.places;
         const fridge = query.fridge;

@@ -1,13 +1,24 @@
 import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
 import {RoomsService} from "./rooms.service";
 import {CreateRoomDto} from "./dto/create-room.dto";
-import {ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiParam} from "@nestjs/swagger";
+import {
+    ApiBadRequestResponse,
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiTags
+} from "@nestjs/swagger";
+import {Room} from "./room.model";
 
+@ApiTags('Room')
 @Controller('rooms')
 export class RoomsController {
     constructor(private roomsService: RoomsService) {
     }
 
+    @ApiOperation({summary: 'Create room'})
+    @ApiCreatedResponse({type: Room})
     @Post()
     create(@Body() dto: CreateRoomDto) {
         return this.roomsService.createRoom(dto)

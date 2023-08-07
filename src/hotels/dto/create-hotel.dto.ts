@@ -13,11 +13,6 @@ export class CreateHotelDto {
     readonly description: string;
 
     @ApiProperty({
-        description: 'Hotel address',
-    })
-    readonly address: string;
-
-    @ApiProperty({
         description: 'Hotel star rating'
     })
     readonly starRating: number;

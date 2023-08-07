@@ -1,4 +1,5 @@
-import {Column, DataType, HasMany, Model, Table} from "sequelize-typescript"
+import {Column, DataType, HasMany, HasOne, Model, Table} from "sequelize-typescript"
+import {Address} from "../address/address.model";
 import {Feedback} from "../feedbacks/feedback.model";
 import {Room} from "../rooms/room.model";
 
@@ -21,14 +22,14 @@ export class Hotel extends Model<Hotel, HotelCreationAttrs> {
     @Column({type: DataType.TEXT})
     description: string;
 
-    @Column({type: DataType.STRING, allowNull: false})
-    address: string;
-
     @Column({type: DataType.INTEGER, allowNull: false, field: 'star_rating'})
     starRating: string;
 
     @Column({type: DataType.STRING, unique: true, allowNull: false})
     contacts: string;
+
+    @HasOne(() => Address)
+    address: Address;
 
     @HasMany(() => Feedback)
     feedbacks: Feedback[];

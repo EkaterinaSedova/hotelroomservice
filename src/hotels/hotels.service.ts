@@ -13,7 +13,7 @@ export class HotelsService {
     }
 
     async getHotelById(id) {
-        const hotel = await this.hotelRepository.findOne({where: {id}});
+        const hotel = await this.hotelRepository.findOne({where: {id}, include: {all: true}});
         if (!hotel) throw new HttpException("Hotel not found", HttpStatus.BAD_REQUEST);
         return hotel;
     }

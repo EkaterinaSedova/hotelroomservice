@@ -16,6 +16,8 @@ import {Booking} from "./bookings/booking.model";
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
+import { AddressModule } from './address/address.module';
+import {Address} from "./address/address.model";
 
 @Module({
   imports: [
@@ -29,7 +31,7 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Hotel, Feedback, Room, Booking],
+      models: [User, Hotel, Feedback, Room, Booking, Address],
       autoLoadModels: true,
     }),
     UsersModule,
@@ -38,6 +40,7 @@ import { AuthModule } from './auth/auth.module';
     RoomsModule,
     BookingsModule,
     AuthModule,
+    AddressModule,
   ],
   controllers: [AppController],
   providers: [AppService],

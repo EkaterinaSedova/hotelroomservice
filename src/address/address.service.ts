@@ -106,4 +106,40 @@ export class AddressService {
         if(!address) throw new HttpException("Address not found", HttpStatus.BAD_REQUEST)
         return {message: "Address successfully deleted"}
     }
+
+    async getHotelsByCountry(query, page) {
+        const limit = 10;
+        const offset = page * limit - limit;
+        const hotels = await this.sequelize.query(`
+                SELECT hotels.id, hotels."name", hotels.description, hotels.star_rating, hotels.contacts
+                FROM hotels, addresses
+                WHERE addresses.id = hotels.address_id
+                  AND addresses.country LIKE '${query.country}' 
+                LIMIT ${limit}
+                OFFSET ${offset}
+                `,
+            {
+                plain: false,
+                type: QueryTypes.SELECT
+            })
+        return hotels;
+    }
+
+    async getHotelsByCity(query, page) {
+        const limit = 10;
+        const offset = page * limit - limit;
+        const hotels = await this.sequelize.query(`
+                SELECT hotels.id, hotels."name", hotels.description, hotels.star_rating, hotels.contacts
+                FROM hotels, addresses
+                WHERE addresses.id = hotels.address_id
+                  AND addresses.city LIKE '${query.city}' 
+                LIMIT ${limit}
+                OFFSET ${offset}
+                `,
+            {
+                plain: false,
+                type: QueryTypes.SELECT
+            })
+        return hotels;
+    }
 }

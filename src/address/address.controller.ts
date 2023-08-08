@@ -85,4 +85,14 @@ export class AddressController {
     deleteAddress(@Param() params: any) {
         return this.addressesService.deleteAddress(params.id)
     }
+
+    @Get('/hotels/country/:page')
+    getHotelsByCountry(@Param() params: any, @Query() query: any) {
+        return this.addressesService.getHotelsByCountry(query, params.page)
+    }
+
+    @Get('/hotels/city/:page')
+    getHotelsByCity(@Param() params: any, @Query() query: any) {
+        return this.addressesService.getHotelsByCity(query, params.page)
+    }
 }

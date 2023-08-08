@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
 import {
     ApiBadRequestResponse,
     ApiCreatedResponse,
@@ -57,5 +57,10 @@ export class HotelsController {
     @Get('/page/:page')
     getHotels(@Param() params: any) {
         return this.hotelsService.getAllHotels(params.page);
+    }
+
+    @Delete('/:id')
+    deleteHotel(@Param() params: any) {
+        return this.hotelsService.deleteHotel(params.id);
     }
 }

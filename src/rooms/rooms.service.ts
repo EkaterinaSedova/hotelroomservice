@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
 import {Room} from "./room.model";
 import {CreateRoomDto} from "./dto/create-room.dto";
@@ -52,6 +52,12 @@ export class RoomsService {
             include: {all: true}
         })
         return rooms;
+    }
+
+    async deleteRoom(id) {
+        const room = await this.roomRepository.destroy({where: {id}})
+        if (!room) throw new HttpException("Room not found", HttpStatus.BAD_REQUEST);
+        return {message: "Room successfully deleted"};
     }
 
 }

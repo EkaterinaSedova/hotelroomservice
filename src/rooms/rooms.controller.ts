@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Query} from '@nestjs/common';
 import {RoomsService} from "./rooms.service";
 import {CreateRoomDto} from "./dto/create-room.dto";
 import {
@@ -39,4 +39,8 @@ export class RoomsController {
         return this.roomsService.getAllRooms(params, query);
     }
 
+    @Delete('/:id')
+    deleteRoom(@Param() params: any) {
+        return this.roomsService.deleteRoom(params.id)
+    }
 }

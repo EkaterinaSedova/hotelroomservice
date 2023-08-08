@@ -1,4 +1,4 @@
-import {Body, Controller, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {AddressService} from "./address.service";
 import {ApiCreatedResponse, ApiOperation} from "@nestjs/swagger";
 import {Address} from "./address.model";
@@ -14,5 +14,15 @@ export class AddressController {
     @Post()
     create(@Body() dto: CreateAddressDto) {
         return this.addressesService.createAddress(dto);
+    }
+
+    @Get('/rooms/city/:city')
+    getRoomsByCity(@Param() params: any) {
+        return this.addressesService.getRoomsByCity(params.city)
+    }
+
+    @Get('/rooms/country/:country')
+    getRoomsByCountry(@Param() params: any) {
+        return this.addressesService.getRoomsByCountry(params.country)
     }
 }

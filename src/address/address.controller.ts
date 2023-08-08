@@ -16,13 +16,13 @@ export class AddressController {
         return this.addressesService.createAddress(dto);
     }
 
-    @Get('/rooms/city/:city')
+    @Get('/rooms/city/:city/:page')
     getRoomsByCity(@Param() params: any) {
-        return this.addressesService.getRoomsByCity(params.city)
+        return this.addressesService.getRoomsByCity(params.city, params.page)
     }
 
-    @Get('/rooms/country/:country')
+    @Get('/rooms/country/:country/:page')
     getRoomsByCountry(@Param() params: any) {
-        return this.addressesService.getRoomsByCountry(params.country)
+        return this.addressesService.getRoomsByCountry(params.country, params.page)
     }
 }

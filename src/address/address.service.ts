@@ -1,14 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
 import {Address} from "./address.model";
 import {CreateAddressDto} from "./dto/create-address.dto";
 import {Room} from "../rooms/room.model";
 import {Sequelize} from "sequelize-typescript";
 import {QueryTypes} from "sequelize";
+import {Hotel} from "../hotels/hotel.model";
 
 @Injectable()
 export class AddressService {
     constructor(@InjectModel(Address) private addressRepository: typeof Address,
+                @InjectModel(Room) private roomRepository: typeof Room,
+                @InjectModel(Hotel) private hotelRepository: typeof Hotel,
                 private sequelize: Sequelize) {
     }
 
@@ -95,4 +98,12 @@ export class AddressService {
         return rooms;
     }
 
+    async deleteAddress(id) {
+        const addressId = id;
+        const address = await this.addressRepository.destroy({where: {id}});
+        const hotel = await this.hotelRepository.destroy({where: {addressId}});
+        const rooms = await this.roomRepository.destroy({where: {addressId}});
+        if(!address) throw new HttpException("Address not found", HttpStatus.BAD_REQUEST)
+        return {message: "Address successfully deleted"}
+    }
 }

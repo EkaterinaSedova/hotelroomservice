@@ -3,16 +3,20 @@ import {InjectModel} from "@nestjs/sequelize";
 import {Room} from "./room.model";
 import {CreateRoomDto} from "./dto/create-room.dto";
 import {HotelsService} from "../hotels/hotels.service";
+import {Hotel} from "../hotels/hotel.model";
 
 @Injectable()
 export class RoomsService {
 
     constructor(@InjectModel(Room) private roomRepository: typeof Room,
-                private hotelsService: HotelsService) {
+                @InjectModel(Hotel) private hotelRepository: typeof Hotel ){
     }
 
     async createRoom(dto: CreateRoomDto) {
-        const addressId = await this.hotelsService.findAddressByHotelId(dto.hotelId);
+        const hotel = await this.hotelRepository.findOne({
+            where: {id: dto.hotelId}
+        });
+        const addressId = hotel.addressId;
         const room = await this.roomRepository.create({...dto, addressId: addressId})
         return room;
     }

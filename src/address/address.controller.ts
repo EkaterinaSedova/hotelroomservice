@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Query} from '@nestjs/common';
 import {AddressService} from "./address.service";
 import {ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
 import {Address} from "./address.model";
@@ -79,5 +79,10 @@ export class AddressController {
     @Get('/rooms/country/:page')
     getRoomsByCountry(@Param() params: any, @Query() query: any) {
         return this.addressesService.getRoomsByCountry(query, params.page)
+    }
+
+    @Delete('/:id')
+    deleteAddress(@Param() params: any) {
+        return this.addressesService.deleteAddress(params.id)
     }
 }

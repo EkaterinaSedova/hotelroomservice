@@ -3,11 +3,6 @@ import {ApiProperty} from "@nestjs/swagger";
 export class CreateAddressDto {
 
     @ApiProperty({
-        description: 'Hotel ID',
-    })
-    readonly hotelId: number;
-
-    @ApiProperty({
         description: 'Country',
     })
     readonly country: string;

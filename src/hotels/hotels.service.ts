@@ -2,6 +2,7 @@ import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
 import {Hotel} from "./hotel.model";
 import {CreateHotelDto} from "./dto/create-hotel.dto";
+import {Address} from "../address/address.model";
 
 @Injectable()
 export class HotelsService {
@@ -21,8 +22,22 @@ export class HotelsService {
     async getAllHotels(page) {
         const limit = 2;
         const offset = page * limit - limit;
-        const hotels = await this.hotelRepository.findAll({limit, offset, include: {all: true}});
+        const hotels = await this.hotelRepository.findAll({
+            limit,
+            offset,
+            include: {all: true},
+            where: {
+
+            }
+        });
         return hotels;
+    }
+
+    async findAddressByHotelId(id) {
+        const hotel = await this.hotelRepository.findOne({
+            where: {id}
+        });
+        return hotel.addressId;
     }
 
 }

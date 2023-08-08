@@ -1,4 +1,4 @@
-import {Column, DataType, HasMany, HasOne, Model, Table} from "sequelize-typescript"
+import {Column, DataType, ForeignKey, HasMany, HasOne, Model, Table} from "sequelize-typescript"
 import {Address} from "../address/address.model";
 import {Feedback} from "../feedbacks/feedback.model";
 import {Room} from "../rooms/room.model";
@@ -28,8 +28,9 @@ export class Hotel extends Model<Hotel, HotelCreationAttrs> {
     @Column({type: DataType.STRING, unique: true, allowNull: false})
     contacts: string;
 
-    @HasOne(() => Address)
-    address: Address;
+    @ForeignKey(() => Address)
+    @Column({type: DataType.INTEGER, field: 'address_id'})
+    addressId: number;
 
     @HasMany(() => Feedback)
     feedbacks: Feedback[];

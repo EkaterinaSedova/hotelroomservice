@@ -21,4 +21,9 @@ export class CreateHotelDto {
         description: 'Hotel contacts'
     })
     readonly contacts: string;
+
+    @ApiProperty({
+        description: 'Address ID',
+    })
+    readonly addressId: string;
 }

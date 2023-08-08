@@ -1,5 +1,6 @@
-import {Column, DataType, ForeignKey, Model, Table} from "sequelize-typescript"
+import {Column, DataType, ForeignKey, HasMany, HasOne, Model, Table} from "sequelize-typescript"
 import {Hotel} from "../hotels/hotel.model";
+import {Room} from "../rooms/room.model";
 
 interface AddressCreationAttrs {
     country: string;
@@ -21,7 +22,9 @@ export class Address extends Model<Address, AddressCreationAttrs> {
     @Column({type: DataType.STRING, allowNull: false})
     address: string;
 
-    @ForeignKey(() => Hotel)
-    @Column({type: DataType.INTEGER, field: 'hotel_id'})
-    hotelId: number;
+    @HasOne(() => Hotel)
+    hotel: Hotel;
+
+    @HasMany(() => Room)
+    rooms: Room;
 }

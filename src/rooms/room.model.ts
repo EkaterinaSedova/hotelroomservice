@@ -1,6 +1,7 @@
-import {Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript"
+import {Column, DataType, ForeignKey, HasMany, HasOne, Model, Table} from "sequelize-typescript"
 import {Hotel} from "../hotels/hotel.model";
 import {Booking} from "../bookings/booking.model";
+import {Address} from "../address/address.model";
 
 interface RoomCreationAttrs {
 }
@@ -17,6 +18,10 @@ export class Room extends Model<Room, RoomCreationAttrs> {
     @ForeignKey(() => Hotel)
     @Column({type: DataType.INTEGER, field: 'hotel_id'})
     hotelId: number;
+
+    @ForeignKey(() => Address)
+    @Column({type: DataType.INTEGER, field: 'address_id'})
+    addressId: number;
 
     @HasMany(() => Booking)
     bookings: Booking[];

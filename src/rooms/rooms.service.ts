@@ -2,15 +2,18 @@ import { Injectable } from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
 import {Room} from "./room.model";
 import {CreateRoomDto} from "./dto/create-room.dto";
+import {HotelsService} from "../hotels/hotels.service";
 
 @Injectable()
 export class RoomsService {
 
-    constructor(@InjectModel(Room) private roomRepository: typeof Room) {
+    constructor(@InjectModel(Room) private roomRepository: typeof Room,
+                private hotelsService: HotelsService) {
     }
 
     async createRoom(dto: CreateRoomDto) {
-        const room = await this.roomRepository.create(dto)
+        const addressId = await this.hotelsService.findAddressByHotelId(dto.hotelId);
+        const room = await this.roomRepository.create({...dto, addressId: addressId})
         return room;
     }
 
@@ -41,7 +44,8 @@ export class RoomsService {
             },
             limit,
             offset,
-            order: [['options.price', 'ASC']]
+            order: [['options.price', 'ASC']],
+            include: {all: true}
         })
         return rooms;
     }

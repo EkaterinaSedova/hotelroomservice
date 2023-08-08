@@ -1,6 +1,6 @@
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
 import {AddressService} from "./address.service";
-import {ApiCreatedResponse, ApiOperation} from "@nestjs/swagger";
+import {ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
 import {Address} from "./address.model";
 import {CreateAddressDto} from "./dto/create-address.dto";
 
@@ -9,20 +9,75 @@ export class AddressController {
     constructor(private addressesService: AddressService) {
     }
 
-    @ApiOperation({summary: 'Create address'})
+    @ApiOperation({
+        summary: 'Create address'
+    })
     @ApiCreatedResponse({type: Address})
     @Post()
     create(@Body() dto: CreateAddressDto) {
         return this.addressesService.createAddress(dto);
     }
 
-    @Get('/rooms/city/:city/:page')
-    getRoomsByCity(@Param() params: any) {
-        return this.addressesService.getRoomsByCity(params.city, params.page)
+    @ApiOperation({
+        summary: 'Get rooms in current city'
+    })
+    @ApiOkResponse({
+        description: 'Success'
+    })
+    @ApiParam({
+        name: 'page',
+        description: 'Current page',
+    })
+    @ApiQuery({
+        name: 'city',
+        description: 'Current city'
+    })
+    @ApiQuery({
+        name: 'places',
+        description: 'Places in room'
+    })
+    @ApiQuery({
+        name: 'fridge',
+        description: 'Is there a fridge in room? (true/false)'
+    })
+    @ApiQuery({
+        name: 'price',
+        description: 'asc/desc'
+    })
+    @Get('/rooms/city/:page')
+    getRoomsByCity(@Param() params: any, @Query() query: any) {
+        return this.addressesService.getRoomsByCity(query, params.page)
     }
 
-    @Get('/rooms/country/:country/:page')
-    getRoomsByCountry(@Param() params: any) {
-        return this.addressesService.getRoomsByCountry(params.country, params.page)
+
+    @ApiOperation({
+        summary: 'Get rooms in current country'
+    })
+    @ApiOkResponse({
+        description: 'Success'
+    })
+    @ApiParam({
+        name: 'page',
+        description: 'Current page',
+    })
+    @ApiQuery({
+        name: 'country',
+        description: 'Current country'
+    })
+    @ApiQuery({
+        name: 'places',
+        description: 'Places in room'
+    })
+    @ApiQuery({
+        name: 'fridge',
+        description: 'Is there a fridge in room? (true/false)'
+    })
+    @ApiQuery({
+        name: 'price',
+        description: 'asc/desc'
+    })
+    @Get('/rooms/country/:page')
+    getRoomsByCountry(@Param() params: any, @Query() query: any) {
+        return this.addressesService.getRoomsByCountry(query, params.page)
     }
 }

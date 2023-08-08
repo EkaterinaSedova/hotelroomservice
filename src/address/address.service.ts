@@ -17,31 +17,73 @@ export class AddressService {
         return address;
     }
 
-    async getRoomsByCity(city, page) {
+    async getRoomsByCity(query, page) {
         const limit = 10;
         const offset = page * limit - limit;
+        if(query.price === 'desc') {
+            const rooms = await this.sequelize.query(`
+                SELECT rooms.id, rooms."options", rooms.hotel_id, rooms.address_id  
+                FROM rooms, addresses 
+                WHERE addresses.id = rooms.address_id 
+                  AND addresses.city LIKE '${query.city}'
+                  AND rooms."options"->>'fridge' LIKE '${query.fridge}'
+                  AND rooms."options"->>'places' LIKE '${query.places}'
+                ORDER BY rooms."options"->'price' DESC
+                LIMIT ${limit}
+                OFFSET ${offset}
+                `,
+                {
+                    plain: false,
+                    type: QueryTypes.SELECT
+                })
+            return rooms;
+        }
         const rooms = await this.sequelize.query(`
                 SELECT rooms.id, rooms."options", rooms.hotel_id, rooms.address_id  
                 FROM rooms, addresses 
-                WHERE addresses.id = rooms.address_id AND addresses.city LIKE '${city}' 
+                WHERE addresses.id = rooms.address_id 
+                  AND addresses.city LIKE '${query.city}'
+                  AND rooms."options"->>'fridge' LIKE '${query.fridge}'
+                  AND rooms."options"->>'places' LIKE '${query.places}'
                 ORDER BY rooms."options"->'price'
                 LIMIT ${limit}
                 OFFSET ${offset}
                 `,
             {
-            plain: false,
-            type: QueryTypes.SELECT
-        })
+                plain: false,
+                type: QueryTypes.SELECT
+            })
         return rooms;
     }
 
-    async getRoomsByCountry(country, page) {
+    async getRoomsByCountry(query, page) {
         const limit = 10;
         const offset = page * limit - limit;
+        if(query.price === 'desc') {
+            const rooms = await this.sequelize.query(`
+                SELECT rooms.id, rooms."options", rooms.hotel_id, rooms.address_id  
+                FROM rooms, addresses 
+                WHERE addresses.id = rooms.address_id 
+                  AND addresses.country LIKE '${query.country}' 
+                  AND rooms."options"->>'fridge' LIKE '${query.fridge}'
+                  AND rooms."options"->>'places' LIKE '${query.places}'
+                ORDER BY rooms."options"->'price' DESC
+                LIMIT ${limit}
+                OFFSET ${offset}
+                `,
+                {
+                    plain: false,
+                    type: QueryTypes.SELECT
+                })
+            return rooms;
+        }
         const rooms = await this.sequelize.query(`
                 SELECT rooms.id, rooms."options", rooms.hotel_id, rooms.address_id  
                 FROM rooms, addresses 
-                WHERE addresses.id = rooms.address_id AND addresses.country LIKE '${country}' 
+                WHERE addresses.id = rooms.address_id 
+                  AND addresses.country LIKE '${query.country}' 
+                  AND rooms."options"->>'fridge' LIKE '${query.fridge}'
+                  AND rooms."options"->>'places' LIKE '${query.places}'
                 ORDER BY rooms."options"->'price'
                 LIMIT ${limit}
                 OFFSET ${offset}

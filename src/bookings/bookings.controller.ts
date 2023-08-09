@@ -1,5 +1,5 @@
-import {Body, Controller, Post} from '@nestjs/common';
-import {ApiCreatedResponse, ApiOperation, ApiTags} from "@nestjs/swagger";
+import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
+import {ApiCreatedResponse, ApiOperation, ApiParam, ApiTags} from "@nestjs/swagger";
 import {BookingsService} from "./bookings.service";
 import {Booking} from "./booking.model";
 import {CreateBookingDto} from "./dto/create-booking.dto";
@@ -14,8 +14,37 @@ export class BookingsController {
     @ApiOperation({summary: 'Create booking'})
     @ApiCreatedResponse({type: Booking})
     @Post()
-    create(@Body() dto: CreateBookingDto) {
+    createBooking(@Body() dto: CreateBookingDto) {
         return this.bookingsService.createBooking(dto);
+    }
+
+
+    @ApiParam({
+        name: 'id',
+        description: 'Booking ID'
+    })
+    @Delete('/:id')
+    deleteBooking(@Param() params: any) {
+        return this.bookingsService.deleteBooking(params.id)
+    }
+
+    @ApiParam({
+        name: 'id',
+        description: 'Hotel ID'
+    })
+    @Get('/hotel/:id')
+    getBookingsByHotel(@Param() params: any) {
+        return this.bookingsService.getBookingsByHotelId(params.id);
+    }
+
+
+    @ApiParam({
+        name: 'id',
+        description: 'Room ID'
+    })
+    @Get('/room/:id')
+    getBookingsByRoom(@Param() params: any) {
+        return this.bookingsService.getBookingsByRoomId(params.id);
     }
 
 }

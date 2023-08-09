@@ -4,7 +4,7 @@ import {
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
-    ApiParam,
+    ApiParam, ApiProperty,
     ApiTags
 } from "@nestjs/swagger";
 import {HotelsService} from "./hotels.service";
@@ -63,6 +63,11 @@ export class HotelsController {
         return this.hotelsService.getAllHotels(params.page);
     }
 
+
+    @ApiParam({
+        name: 'id',
+        description: 'Hotel ID'
+    })
     @Delete('/:id')
     deleteHotel(@Param() params: any) {
         return this.hotelsService.deleteHotel(params.id);

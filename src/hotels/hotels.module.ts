@@ -5,12 +5,13 @@ import {SequelizeModule} from "@nestjs/sequelize";
 import {Hotel} from "./hotel.model";
 import {Room} from "../rooms/room.model";
 import {FilesModule} from "../files/files.module";
+import {Booking} from "../bookings/booking.model";
 
 @Module({
   controllers: [HotelsController],
   providers: [HotelsService],
   imports: [
-    SequelizeModule.forFeature([Hotel, Room]),
+    SequelizeModule.forFeature([Hotel, Room, Booking]),
       FilesModule
   ],
   exports: [

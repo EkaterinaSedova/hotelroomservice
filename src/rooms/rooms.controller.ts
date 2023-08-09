@@ -41,6 +41,10 @@ export class RoomsController {
         return this.roomsService.getAllRooms(params, query);
     }
 
+    @ApiParam({
+        name: 'id',
+        description: 'Room ID',
+    })
     @Delete('/:id')
     deleteRoom(@Param() params: any) {
         return this.roomsService.deleteRoom(params.id)

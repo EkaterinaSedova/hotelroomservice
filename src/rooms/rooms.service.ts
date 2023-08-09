@@ -5,14 +5,15 @@ import {CreateRoomDto} from "./dto/create-room.dto";
 import {HotelsService} from "../hotels/hotels.service";
 import {Hotel} from "../hotels/hotel.model";
 import {FilesService} from "../files/files.service";
+import {Booking} from "../bookings/booking.model";
 
 @Injectable()
 export class RoomsService {
 
     constructor(@InjectModel(Room) private roomRepository: typeof Room,
                 @InjectModel(Hotel) private hotelRepository: typeof Hotel,
-                private fileService: FilesService){
-    }
+                @InjectModel(Booking) private bookingRepository: typeof Booking,
+                private fileService: FilesService) {}
 
     async createRoom(dto: CreateRoomDto, images: any[]) {
         const hotel = await this.hotelRepository.findOne({
@@ -64,6 +65,7 @@ export class RoomsService {
     async deleteRoom(id) {
         const room = await this.roomRepository.destroy({where: {id}})
         if (!room) throw new HttpException("Room not found", HttpStatus.BAD_REQUEST);
+        const bookings = await this.bookingRepository.destroy({where: {roomId: id}})
         return {message: "Room successfully deleted"};
     }
 

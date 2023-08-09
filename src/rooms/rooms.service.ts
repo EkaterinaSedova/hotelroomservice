@@ -4,20 +4,27 @@ import {Room} from "./room.model";
 import {CreateRoomDto} from "./dto/create-room.dto";
 import {HotelsService} from "../hotels/hotels.service";
 import {Hotel} from "../hotels/hotel.model";
+import {FilesService} from "../files/files.service";
 
 @Injectable()
 export class RoomsService {
 
     constructor(@InjectModel(Room) private roomRepository: typeof Room,
-                @InjectModel(Hotel) private hotelRepository: typeof Hotel ){
+                @InjectModel(Hotel) private hotelRepository: typeof Hotel,
+                private fileService: FilesService){
     }
 
-    async createRoom(dto: CreateRoomDto) {
+    async createRoom(dto: CreateRoomDto, images: any[]) {
         const hotel = await this.hotelRepository.findOne({
             where: {id: dto.hotelId}
         });
         const addressId = hotel.addressId;
-        const room = await this.roomRepository.create({...dto, addressId: addressId})
+        let fileNames = [];
+        for(let i = 0; i < images.length; i++)
+        {
+            fileNames.push(await this.fileService.createImage(images[i]));
+        }
+        const room = await this.roomRepository.create({...dto, addressId: addressId, images: fileNames});
         return room;
     }
 

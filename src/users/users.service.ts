@@ -6,7 +6,7 @@ import * as http from "http";
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectModel(User) private userRepository: typeof User) {}
+    constructor(@InjectModel(User) private userRepository: typeof User,) {}
 
     async createUser(dto: CreateUserDto) {
         const user = await this.userRepository.create(dto);

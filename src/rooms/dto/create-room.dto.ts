@@ -12,6 +12,13 @@ export class CreateRoomDto {
     })
     readonly options: object;
 
+    @ApiPropertyOptional({
+        description: 'Images',
+        type: 'string',
+        format: 'binary'
+    })
+    readonly images: string[];
+
     @ApiProperty({
         description: 'Hotel ID',
         example: 1

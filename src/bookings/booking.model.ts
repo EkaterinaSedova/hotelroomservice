@@ -8,7 +8,7 @@ interface BookingCreationAttrs {
     outDate: Date;
 }
 
-@Table({tableName: 'boookings', updatedAt: false})
+@Table({tableName: 'bookings', updatedAt: false})
 export class Booking extends Model<Booking, BookingCreationAttrs> {
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;

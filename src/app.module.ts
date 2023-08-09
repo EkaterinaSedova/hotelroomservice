@@ -18,6 +18,7 @@ import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { AddressModule } from './address/address.module';
 import {Address} from "./address/address.model";
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import {Address} from "./address/address.model";
     BookingsModule,
     AuthModule,
     AddressModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

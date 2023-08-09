@@ -9,6 +9,7 @@ interface HotelCreationAttrs {
     address: string;
     starRating: number;
     contacts: string;
+    images: string[];
 }
 
 @Table({tableName: 'hotels', createdAt: false, updatedAt: false })
@@ -21,6 +22,9 @@ export class Hotel extends Model<Hotel, HotelCreationAttrs> {
 
     @Column({type: DataType.TEXT})
     description: string;
+
+    @Column({type: DataType.ARRAY(DataType.STRING), allowNull: true})
+    images: string[];
 
     @Column({type: DataType.INTEGER, allowNull: false, field: 'star_rating'})
     starRating: string;

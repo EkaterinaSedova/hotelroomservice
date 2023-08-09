@@ -1,4 +1,4 @@
-import {ApiProperty} from "@nestjs/swagger";
+import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
 
 export class CreateHotelDto {
 
@@ -13,6 +13,13 @@ export class CreateHotelDto {
         example: 'We love our clients and watermelons'
     })
     readonly description: string;
+
+    @ApiPropertyOptional({
+        description: 'Images',
+        type: 'string',
+        format: 'binary'
+    })
+    readonly images: string[];
 
     @ApiProperty({
         description: 'Hotel star rating',

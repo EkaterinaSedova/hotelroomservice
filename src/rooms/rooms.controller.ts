@@ -1,8 +1,8 @@
-import {Body, Controller, Delete, Get, Param, Post, Query} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Query, UploadedFiles} from '@nestjs/common';
 import {RoomsService} from "./rooms.service";
 import {CreateRoomDto} from "./dto/create-room.dto";
 import {
-    ApiBadRequestResponse,
+    ApiBadRequestResponse, ApiConsumes,
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
@@ -19,9 +19,11 @@ export class RoomsController {
 
     @ApiOperation({summary: 'Create room'})
     @ApiCreatedResponse({type: Room})
+    @ApiConsumes('multipart/form-data')
     @Post()
-    create(@Body() dto: CreateRoomDto) {
-        return this.roomsService.createRoom(dto)
+    create(@Body() dto: CreateRoomDto,
+           @UploadedFiles() images) {
+        return this.roomsService.createRoom(dto, images)
     }
 
     @ApiOperation({

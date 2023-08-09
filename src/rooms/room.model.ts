@@ -13,7 +13,9 @@ export class Room extends Model<Room, RoomCreationAttrs> {
 
     @Column({type: DataType.JSONB})
     options;
-    
+
+    @Column({type: DataType.ARRAY(DataType.STRING), allowNull: true})
+    images: string[];
 
     @ForeignKey(() => Hotel)
     @Column({type: DataType.INTEGER, field: 'hotel_id'})

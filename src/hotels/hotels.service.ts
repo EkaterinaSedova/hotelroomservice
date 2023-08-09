@@ -4,16 +4,24 @@ import {Hotel} from "./hotel.model";
 import {CreateHotelDto} from "./dto/create-hotel.dto";
 import {Address} from "../address/address.model";
 import {Room} from "../rooms/room.model";
+import {FilesService} from "../files/files.service";
 
 @Injectable()
 export class HotelsService {
     constructor(@InjectModel(Hotel) private hotelRepository: typeof Hotel,
-                @InjectModel(Room) private roomRepository: typeof Room
+                @InjectModel(Room) private roomRepository: typeof Room,
+                private fileService: FilesService,
 
     ) {}
 
-    async createHotel(dto: CreateHotelDto) {
-        const hotel = await this.hotelRepository.create(dto);
+    async createHotel(dto: CreateHotelDto, images: any[]) {
+
+        let fileNames = [];
+        for(let i = 0; i < images.length; i++)
+        {
+            fileNames.push(await this.fileService.createImage(images[i]));
+        }
+        const hotel = await this.hotelRepository.create({...dto, images: fileNames});
         return hotel;
     }
 

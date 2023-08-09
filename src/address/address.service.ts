@@ -25,8 +25,8 @@ export class AddressService {
         const offset = page * limit - limit;
         if(query.price === 'desc') {
             const rooms = await this.sequelize.query(`
-                SELECT rooms.id, rooms."options", rooms.hotel_id, rooms.address_id  
-                FROM rooms, addresses 
+                SELECT rooms.id, rooms."options", rooms.hotel_id, rooms.address_id
+                FROM rooms, addresses
                 WHERE addresses.id = rooms.address_id 
                   AND addresses.city LIKE '${query.city}'
                   AND rooms."options"->>'fridge' LIKE '${query.fridge}'

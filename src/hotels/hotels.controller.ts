@@ -1,6 +1,6 @@
-import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, UploadedFiles, UseInterceptors} from '@nestjs/common';
 import {
-    ApiBadRequestResponse,
+    ApiBadRequestResponse, ApiConsumes,
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
@@ -10,6 +10,7 @@ import {
 import {HotelsService} from "./hotels.service";
 import {Hotel} from "./hotel.model";
 import {CreateHotelDto} from "./dto/create-hotel.dto";
+import {FilesInterceptor} from "@nestjs/platform-express";
 
 @ApiTags('Hotel')
 @Controller('hotels')
@@ -18,9 +19,12 @@ export class HotelsController {
     }
     @ApiOperation({summary: 'Create hotel'})
     @ApiCreatedResponse({type: Hotel})
+    @ApiConsumes('multipart/form-data')
+    @UseInterceptors(FilesInterceptor('images'))
     @Post()
-    create(@Body() hotelDto: CreateHotelDto) {
-        return this.hotelsService.createHotel(hotelDto);
+    create(@Body() hotelDto: CreateHotelDto,
+           @UploadedFiles() images) {
+        return this.hotelsService.createHotel(hotelDto, images);
     }
 
     @ApiOperation({

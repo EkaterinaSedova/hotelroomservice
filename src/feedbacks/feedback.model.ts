@@ -15,7 +15,7 @@ export class Feedback extends Model<Feedback, FeedbackCreationAttrs> {
     @Column({type: DataType.INTEGER, allowNull: false})
     rate: number;
 
-    @Column({type: DataType.INTEGER})
+    @Column({type: DataType.STRING})
     message: string;
 
     @ForeignKey(() => User)

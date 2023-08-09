@@ -1,6 +1,6 @@
-import {Body, Controller, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Param, Post} from '@nestjs/common';
 import {FeedbacksService} from "./feedbacks.service";
-import {ApiCreatedResponse, ApiOperation, ApiTags} from "@nestjs/swagger";
+import {ApiCreatedResponse, ApiOperation, ApiParam, ApiTags} from "@nestjs/swagger";
 import {Feedback} from "./feedback.model";
 import {CreateFeedbackDto} from "./dto/create-feedback.dto";
 
@@ -14,8 +14,19 @@ export class FeedbacksController {
     @ApiOperation({summary: 'Create feedback'})
     @ApiCreatedResponse({type: Feedback})
     @Post()
-    create(@Body() dto: CreateFeedbackDto) {
+    createFeedback(@Body() dto: CreateFeedbackDto) {
         return this.feedbacksService.createFeedback(dto);
     }
+
+    @ApiOperation({summary: 'Delete feedback'})
+    @ApiParam({
+        name: 'id',
+        description: 'Feedback ID'
+    })
+    @Delete('/:id')
+    deleteFeedback(@Param() params: any) {
+        return this.feedbacksService.deleteFeedback(params.id);
+    }
+
 
 }

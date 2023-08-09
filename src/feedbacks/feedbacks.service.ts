@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
 import {Feedback} from "./feedback.model";
 import {CreateFeedbackDto} from "./dto/create-feedback.dto";
@@ -13,4 +13,11 @@ export class FeedbacksService {
         const feedback = await this.feedbackRepository.create(dto);
         return feedback;
     }
+
+    async deleteFeedback(id) {
+        const feedback = await this.feedbackRepository.destroy({where: {id}});
+        if (!feedback) throw new HttpException("Feedback not found", HttpStatus.BAD_REQUEST);
+        return {message: "Feedback successfully deleted"};
+    }
+
 }

@@ -2,11 +2,14 @@ import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
 import {Feedback} from "./feedback.model";
 import {CreateFeedbackDto} from "./dto/create-feedback.dto";
+import {Sequelize} from "sequelize-typescript";
+import {QueryTypes} from "sequelize";
 
 @Injectable()
 export class FeedbacksService {
 
-    constructor(@InjectModel(Feedback) private feedbackRepository: typeof Feedback) {
+    constructor(@InjectModel(Feedback) private feedbackRepository: typeof Feedback,
+                private sequelize: Sequelize) {
     }
 
     async createFeedback(dto: CreateFeedbackDto) {
@@ -19,5 +22,24 @@ export class FeedbacksService {
         if (!feedback) throw new HttpException("Feedback not found", HttpStatus.BAD_REQUEST);
         return {message: "Feedback successfully deleted"};
     }
+
+    async getAverageRating(hotelId) {
+        const averageRating = await this.sequelize.query(`
+                SELECT AVG(feedbacks.rate) AS "averageRating"
+                FROM feedbacks 
+                WHERE feedbacks.hotel_id = ${hotelId}
+                `,
+            {
+            plain: false,
+            type: QueryTypes.SELECT
+        })
+        return averageRating;
+    }
+
+    async getFeedbackByHotelId(hotelId) {
+        const feedbacks = await this.feedbackRepository.findAll({where: {hotelId}})
+        return feedbacks;
+    }
+
 
 }

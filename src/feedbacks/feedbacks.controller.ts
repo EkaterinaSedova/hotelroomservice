@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
 import {FeedbacksService} from "./feedbacks.service";
 import {ApiCreatedResponse, ApiOperation, ApiParam, ApiTags} from "@nestjs/swagger";
 import {Feedback} from "./feedback.model";
@@ -26,6 +26,26 @@ export class FeedbacksController {
     @Delete('/:id')
     deleteFeedback(@Param() params: any) {
         return this.feedbacksService.deleteFeedback(params.id);
+    }
+
+    @ApiOperation({summary: 'Get average rating of hotel'})
+    @ApiParam({
+        name: 'hotelId',
+        description: 'Hotel ID'
+    })
+    @Get('/avg/:hotelId')
+    getAverageRating(@Param() params: any) {
+        return this.feedbacksService.getAverageRating(params.hotelId)
+    }
+
+    @ApiOperation({summary: 'Gets feedbacks by hotel ID'})
+    @ApiParam({
+        name: 'hotelId',
+        description: 'Hotel ID'
+    })
+    @Get('/:hotelId')
+    getFeedbackByHotelId(@Param() params: any) {
+        return this.feedbacksService.getFeedbackByHotelId(params.hotelId)
     }
 
 

@@ -4,8 +4,8 @@ import {Hotel} from "../hotels/hotel.model";
 import {Room} from "../rooms/room.model";
 
 interface BookingCreationAttrs {
-    inDate: string;
-    outDate: string;
+    inDate: Date;
+    outDate: Date;
 }
 
 @Table({tableName: 'boookings', updatedAt: false})
@@ -13,11 +13,11 @@ export class Booking extends Model<Booking, BookingCreationAttrs> {
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;
 
-    @Column({type: DataType.INTEGER, allowNull: false, field: "in_date"})
-    inDate: number;
+    @Column({type: DataType.DATE, allowNull: false, field: "in_date"})
+    inDate: Date;
 
-    @Column({type: DataType.INTEGER, allowNull: false, field: "out_date"})
-    outDate: number;
+    @Column({type: DataType.DATE, allowNull: false, field: "out_date"})
+    outDate: Date;
 
     @ForeignKey(() => User)
     @Column({type: DataType.INTEGER, field: "user_id"})

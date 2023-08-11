@@ -1,9 +1,10 @@
 import {Body, Controller, Delete, Get, Param, Post, Query} from '@nestjs/common';
 import {AddressService} from "./address.service";
-import {ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery} from "@nestjs/swagger";
+import {ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags} from "@nestjs/swagger";
 import {Address} from "./address.model";
 import {CreateAddressDto} from "./dto/create-address.dto";
 
+@ApiTags('Address')
 @Controller('address')
 export class AddressController {
     constructor(private addressesService: AddressService) {
@@ -81,16 +82,43 @@ export class AddressController {
         return this.addressesService.getRoomsByCountry(query, params.page)
     }
 
+
+    @ApiOperation({
+        summary: 'Delete address by address ID'
+    })
     @Delete('/:id')
     deleteAddress(@Param() params: any) {
         return this.addressesService.deleteAddress(params.id)
     }
 
+
+    @ApiOperation({
+        summary: 'Get hotels in country'
+    })
+    @ApiQuery({
+        name: 'country',
+        description: 'Country'
+    })
+    @ApiParam({
+        name: 'page',
+        description: 'Current page',
+    })
     @Get('/hotels/country/:page')
     getHotelsByCountry(@Param() params: any, @Query() query: any) {
         return this.addressesService.getHotelsByCountry(query, params.page)
     }
 
+    @ApiOperation({
+        summary: 'Get hotels in current city'
+    })
+    @ApiQuery({
+        name: 'city',
+        description: 'City'
+    })
+    @ApiParam({
+        name: 'page',
+        description: 'Current page'
+    })
     @Get('/hotels/city/:page')
     getHotelsByCity(@Param() params: any, @Query() query: any) {
         return this.addressesService.getHotelsByCity(query, params.page)

@@ -10,7 +10,7 @@ export class CreateRoomDto {
             price: 30,
         }
     })
-    readonly options: object;
+    readonly options: string;
 
     @ApiPropertyOptional({
         description: 'Images',

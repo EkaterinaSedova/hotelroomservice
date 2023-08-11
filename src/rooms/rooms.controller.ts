@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Post, Query, UploadedFiles} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Query, UploadedFiles, UseInterceptors} from '@nestjs/common';
 import {RoomsService} from "./rooms.service";
 import {CreateRoomDto} from "./dto/create-room.dto";
 import {
@@ -10,6 +10,7 @@ import {
     ApiTags
 } from "@nestjs/swagger";
 import {Room} from "./room.model";
+import {FilesInterceptor} from "@nestjs/platform-express";
 
 @ApiTags('Room')
 @Controller('rooms')
@@ -20,6 +21,7 @@ export class RoomsController {
     @ApiOperation({summary: 'Create room'})
     @ApiCreatedResponse({type: Room})
     @ApiConsumes('multipart/form-data')
+    @UseInterceptors(FilesInterceptor('images'))
     @Post()
     create(@Body() dto: CreateRoomDto,
            @UploadedFiles() images) {
@@ -41,6 +43,10 @@ export class RoomsController {
         return this.roomsService.getAllRooms(params, query);
     }
 
+
+    @ApiOperation({
+        summary: 'Delete room'
+    })
     @ApiParam({
         name: 'id',
         description: 'Room ID',
@@ -48,5 +54,17 @@ export class RoomsController {
     @Delete('/:id')
     deleteRoom(@Param() params: any) {
         return this.roomsService.deleteRoom(params.id)
+    }
+
+    @ApiOperation({
+        summary: 'Get room in hotel by hotel ID'
+    })
+    @ApiParam({
+        name: 'id',
+        description: 'Hotel ID',
+    })
+    @Delete('/:id')
+    getRoomsByHotelId(@Param() params: any) {
+        return this.roomsService.getRoomsByHotelId(params.id)
     }
 }

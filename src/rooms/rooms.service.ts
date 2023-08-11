@@ -25,7 +25,8 @@ export class RoomsService {
         {
             fileNames.push(await this.fileService.createImage(images[i]));
         }
-        const room = await this.roomRepository.create({...dto, addressId: addressId, images: fileNames});
+        const optionsJSON = JSON.parse(dto.options);
+        const room = await this.roomRepository.create({...dto, options: optionsJSON,addressId: addressId, images: fileNames});
         return room;
     }
 
@@ -67,6 +68,11 @@ export class RoomsService {
         if (!room) throw new HttpException("Room not found", HttpStatus.BAD_REQUEST);
         const bookings = await this.bookingRepository.destroy({where: {roomId: id}})
         return {message: "Room successfully deleted"};
+    }
+
+    async getRoomsByHotelId(hotelId) {
+        const rooms = await this.roomRepository.findAll({where: {hotelId}});
+        return rooms;
     }
 
 }

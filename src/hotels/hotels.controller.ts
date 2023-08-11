@@ -64,6 +64,9 @@ export class HotelsController {
     }
 
 
+    @ApiOperation({
+        summary: 'Delete hotel'
+    })
     @ApiParam({
         name: 'id',
         description: 'Hotel ID'

@@ -19,6 +19,9 @@ export class BookingsController {
     }
 
 
+    @ApiOperation({
+        summary: 'Delete booking'
+    })
     @ApiParam({
         name: 'id',
         description: 'Booking ID'
@@ -28,6 +31,10 @@ export class BookingsController {
         return this.bookingsService.deleteBooking(params.id)
     }
 
+
+    @ApiOperation({
+        summary: 'Get bookings in current hotel'
+    })
     @ApiParam({
         name: 'id',
         description: 'Hotel ID'
@@ -38,6 +45,9 @@ export class BookingsController {
     }
 
 
+    @ApiOperation({
+        summary: 'Get bookings in current room'
+    })
     @ApiParam({
         name: 'id',
         description: 'Room ID'

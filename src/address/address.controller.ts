@@ -19,6 +19,7 @@ export class AddressController {
         return this.addressesService.createAddress(dto);
     }
 
+    @ApiTags('Room')
     @ApiOperation({
         summary: 'Get rooms in current city'
     })
@@ -45,17 +46,34 @@ export class AddressController {
         name: 'price',
         description: 'asc/desc'
     })
+    @ApiQuery({
+        name: 'inDate',
+        description: 'in date'
+    })
+    @ApiQuery({
+        name: 'outDate',
+        description: 'out date'
+    })
     @Get('/rooms/city/:page')
     getRoomsByCity(@Param() params: any, @Query() query: any) {
         return this.addressesService.getRoomsByCity(query, params.page)
     }
 
 
+    @ApiTags('Room')
     @ApiOperation({
         summary: 'Get rooms in current country'
     })
     @ApiOkResponse({
         description: 'Success'
+    })
+    @ApiQuery({
+        name: 'inDate',
+        description: 'in date'
+    })
+    @ApiQuery({
+        name: 'outDate',
+        description: 'out date'
     })
     @ApiParam({
         name: 'page',
@@ -91,7 +109,7 @@ export class AddressController {
         return this.addressesService.deleteAddress(params.id)
     }
 
-
+    @ApiTags('Hotel')
     @ApiOperation({
         summary: 'Get hotels in country'
     })
@@ -108,6 +126,8 @@ export class AddressController {
         return this.addressesService.getHotelsByCountry(query, params.page)
     }
 
+
+    @ApiTags('Hotel')
     @ApiOperation({
         summary: 'Get hotels in current city'
     })

@@ -25,16 +25,30 @@ export class AddressService {
         const offset = page * limit - limit;
         if(query.price === 'desc') {
             const rooms = await this.sequelize.query(`
-                SELECT rooms.id, rooms."options", rooms.hotel_id, rooms.address_id
-                FROM rooms, addresses
-                WHERE addresses.id = rooms.address_id 
-                  AND addresses.city LIKE '${query.city}'
-                  AND rooms."options"->>'fridge' LIKE '${query.fridge}'
-                  AND rooms."options"->>'places' LIKE '${query.places}'
-                ORDER BY rooms."options"->'price' DESC
-                LIMIT ${limit}
-                OFFSET ${offset}
-                `,
+            SELECT rooms.id,
+                CASE
+                    WHEN EXISTS(
+                        SELECT 1
+                        FROM bookings
+                            WHERE bookings.room_id = rooms.id
+                              AND (
+                                    ('${query.inDate}' BETWEEN bookings.in_date AND bookings.out_date
+                                        AND '${query.outDate}' BETWEEN bookings.in_date AND bookings.out_date)
+                                    OR
+                                    (bookings.in_date BETWEEN '${query.inDate}' and '${query.outDate}'
+                                        AND bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
+                                )
+                        ) THEN 'Not available'
+                        ELSE 'Available'
+                    END AS availability_status
+            FROM rooms, addresses
+                WHERE addresses.id = rooms.address_id AND addresses.city LIKE '${query.city}'
+                AND rooms."options"->>'fridge' LIKE '${query.fridge}'
+                AND rooms."options"->>'places' LIKE '${query.places}'
+            ORDER BY rooms."options"->'price' DESC
+            LIMIT ${limit}
+            OFFSET ${offset}
+            `,
                 {
                     plain: false,
                     type: QueryTypes.SELECT
@@ -42,15 +56,29 @@ export class AddressService {
             return rooms;
         }
         const rooms = await this.sequelize.query(`
-                SELECT rooms.id, rooms."options", rooms.hotel_id, rooms.address_id  
-                FROM rooms, addresses 
-                WHERE addresses.id = rooms.address_id 
-                  AND addresses.city LIKE '${query.city}'
-                  AND rooms."options"->>'fridge' LIKE '${query.fridge}'
-                  AND rooms."options"->>'places' LIKE '${query.places}'
-                ORDER BY rooms."options"->'price'
-                LIMIT ${limit}
-                OFFSET ${offset}
+                    SELECT rooms.id,
+                           CASE
+                               WHEN EXISTS(
+                                       SELECT 1
+                                       FROM bookings
+                                       WHERE bookings.room_id = rooms.id
+                                         AND (
+                                               ('${query.inDate}' BETWEEN bookings.in_date AND bookings.out_date
+                                                   AND '${query.outDate}' BETWEEN bookings.in_date AND bookings.out_date)
+                                               OR
+                                               (bookings.in_date BETWEEN '${query.inDate}' and '${query.outDate}'
+                                                   AND bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
+                                           )
+                                   ) THEN 'Not available'
+                               ELSE 'Available'
+                               END AS availability_status
+                    FROM rooms, addresses
+                    WHERE addresses.id = rooms.address_id AND addresses.city LIKE '${query.city}'
+                      AND rooms."options"->>'fridge' LIKE '${query.fridge}'
+                      AND rooms."options"->>'places' LIKE '${query.places}'
+                    ORDER BY rooms."options"->'price'
+                        LIMIT ${limit}
+                    OFFSET ${offset}
                 `,
             {
                 plain: false,
@@ -64,15 +92,29 @@ export class AddressService {
         const offset = page * limit - limit;
         if(query.price === 'desc') {
             const rooms = await this.sequelize.query(`
-                SELECT rooms.id, rooms."options", rooms.hotel_id, rooms.address_id  
-                FROM rooms, addresses 
-                WHERE addresses.id = rooms.address_id 
-                  AND addresses.country LIKE '${query.country}' 
-                  AND rooms."options"->>'fridge' LIKE '${query.fridge}'
-                  AND rooms."options"->>'places' LIKE '${query.places}'
-                ORDER BY rooms."options"->'price' DESC
-                LIMIT ${limit}
-                OFFSET ${offset}
+                        SELECT rooms.id,
+                               CASE
+                                   WHEN EXISTS(
+                                           SELECT 1
+                                           FROM bookings
+                                           WHERE bookings.room_id = rooms.id
+                                             AND (
+                                                ('${query.inDate}' BETWEEN bookings.in_date AND bookings.out_date
+                                                AND '${query.outDate}' BETWEEN bookings.in_date AND bookings.out_date)
+                                                OR
+                                                (bookings.in_date BETWEEN '${query.inDate}' and '${query.outDate}'
+                                                AND bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
+                                                )
+                                       ) THEN 'Not available'
+                                   ELSE 'Available'
+                                   END AS availability_status
+                        FROM rooms, addresses
+                        WHERE addresses.id = rooms.address_id AND addresses.country LIKE '${query.country}'
+                          AND rooms."options"->>'fridge' LIKE '${query.fridge}'
+                          AND rooms."options"->>'places' LIKE '${query.places}'
+                        ORDER BY rooms."options"->'price' DESC
+                            LIMIT ${limit}
+                        OFFSET ${offset}
                 `,
                 {
                     plain: false,
@@ -81,15 +123,29 @@ export class AddressService {
             return rooms;
         }
         const rooms = await this.sequelize.query(`
-                SELECT rooms.id, rooms."options", rooms.hotel_id, rooms.address_id  
-                FROM rooms, addresses 
-                WHERE addresses.id = rooms.address_id 
-                  AND addresses.country LIKE '${query.country}' 
-                  AND rooms."options"->>'fridge' LIKE '${query.fridge}'
-                  AND rooms."options"->>'places' LIKE '${query.places}'
-                ORDER BY rooms."options"->'price'
-                LIMIT ${limit}
-                OFFSET ${offset}
+                    SELECT rooms.id,
+                           CASE
+                               WHEN EXISTS(
+                                       SELECT 1
+                                       FROM bookings
+                                       WHERE bookings.room_id = rooms.id
+                                         AND (
+                                               ('${query.inDate}' BETWEEN bookings.in_date AND bookings.out_date
+                                                   AND '${query.outDate}' BETWEEN bookings.in_date AND bookings.out_date)
+                                               OR
+                                               (bookings.in_date BETWEEN '${query.inDate}' and '${query.outDate}'
+                                                   AND bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
+                                           )
+                                   ) THEN 'Not available'
+                               ELSE 'Available'
+                               END AS availability_status
+                    FROM rooms, addresses
+                    WHERE addresses.id = rooms.address_id AND addresses.country LIKE '${query.country}'
+                      AND rooms."options"->>'fridge' LIKE '${query.fridge}'
+                      AND rooms."options"->>'places' LIKE '${query.places}'
+                    ORDER BY rooms."options"->'price'
+                        LIMIT ${limit}
+                    OFFSET ${offset}
                 `,
             {
                 plain: false,

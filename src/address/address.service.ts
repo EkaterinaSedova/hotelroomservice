@@ -36,7 +36,7 @@ export class AddressService {
                                         AND '${query.outDate}' BETWEEN bookings.in_date AND bookings.out_date)
                                     OR
                                     (bookings.in_date BETWEEN '${query.inDate}' and '${query.outDate}'
-                                        AND bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
+                                        or bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
                                 )
                         ) THEN 'Not available'
                         ELSE 'Available'
@@ -61,13 +61,13 @@ export class AddressService {
                                WHEN EXISTS(
                                        SELECT 1
                                        FROM bookings
-                                       WHERE bookings.room_id = rooms.id
+                                       WHERE (bookings.room_id = rooms.id)
                                          AND (
                                                ('${query.inDate}' BETWEEN bookings.in_date AND bookings.out_date
                                                    AND '${query.outDate}' BETWEEN bookings.in_date AND bookings.out_date)
                                                OR
-                                               (bookings.in_date BETWEEN '${query.inDate}' and '${query.outDate}'
-                                                   AND bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
+                                               (bookings.in_date BETWEEN '${query.inDate}' AND '${query.outDate}'
+                                                   or bookings.out_date BETWEEN '${query.inDate}' AND '${query.outDate}')
                                            )
                                    ) THEN 'Not available'
                                ELSE 'Available'
@@ -77,7 +77,7 @@ export class AddressService {
                       AND rooms."options"->>'fridge' LIKE '${query.fridge}'
                       AND rooms."options"->>'places' LIKE '${query.places}'
                     ORDER BY rooms."options"->'price'
-                        LIMIT ${limit}
+                    LIMIT ${limit}
                     OFFSET ${offset}
                 `,
             {
@@ -103,7 +103,7 @@ export class AddressService {
                                                 AND '${query.outDate}' BETWEEN bookings.in_date AND bookings.out_date)
                                                 OR
                                                 (bookings.in_date BETWEEN '${query.inDate}' and '${query.outDate}'
-                                                AND bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
+                                                or bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
                                                 )
                                        ) THEN 'Not available'
                                    ELSE 'Available'
@@ -134,7 +134,7 @@ export class AddressService {
                                                    AND '${query.outDate}' BETWEEN bookings.in_date AND bookings.out_date)
                                                OR
                                                (bookings.in_date BETWEEN '${query.inDate}' and '${query.outDate}'
-                                                   AND bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
+                                                or bookings.out_date BETWEEN '${query.inDate}' and '${query.outDate}')
                                            )
                                    ) THEN 'Not available'
                                ELSE 'Available'

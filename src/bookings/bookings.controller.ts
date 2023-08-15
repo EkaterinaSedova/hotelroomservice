@@ -6,8 +6,7 @@ import {CreateBookingDto} from "./dto/create-booking.dto";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @ApiTags('Booking')
-@ApiBearerAuth('access-token')
-@UseGuards(JwtAuthGuard)
+
 @Controller('bookings')
 export class BookingsController {
 

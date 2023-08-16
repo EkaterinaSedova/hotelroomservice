@@ -12,6 +12,7 @@ import {Hotel} from "./hotel.model";
 import {CreateHotelDto} from "./dto/create-hotel.dto";
 import {FilesInterceptor} from "@nestjs/platform-express";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {UpdateHotelDto} from "./dto/update-hotel.dto";
 
 @ApiTags('Hotel')
 @Controller('hotels')
@@ -79,5 +80,14 @@ export class HotelsController {
     @Delete('/:id')
     deleteHotel(@Param() params: any) {
         return this.hotelsService.deleteHotel(params.id);
+    }
+
+    @ApiOperation({summary: 'Update hotel'})
+    @ApiConsumes('multipart/form-data')
+    @UseInterceptors(FilesInterceptor('images'))
+    @Post('/update')
+    updateHotel(@Body() dto: UpdateHotelDto,
+                @UploadedFiles() images) {
+        return this.hotelsService.updateHotel(dto, images);
     }
 }

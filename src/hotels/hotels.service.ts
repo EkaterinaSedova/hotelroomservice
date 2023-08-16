@@ -2,10 +2,10 @@ import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
 import {Hotel} from "./hotel.model";
 import {CreateHotelDto} from "./dto/create-hotel.dto";
-import {Address} from "../address/address.model";
 import {Room} from "../rooms/room.model";
 import {FilesService} from "../files/files.service";
 import {Booking} from "../bookings/booking.model";
+import {UpdateHotelDto} from "./dto/update-hotel.dto";
 
 @Injectable()
 export class HotelsService {
@@ -60,4 +60,21 @@ export class HotelsService {
         return {message: 'Hotel successfully deleted'}
     }
 
+    async updateHotel(dto: UpdateHotelDto, images: any[]) {
+        let fileNames = [];
+        for(let i = 0; i < images.length; i++)
+        {
+            fileNames.push(await this.fileService.createImage(images[i]));
+        }
+        if(!fileNames.length) fileNames = null;
+        const candidate = await this.hotelRepository.findByPk(dto.id);
+        const hotel = await this.hotelRepository.update({
+            name: dto.name || candidate.name,
+            description: dto.description || candidate.description,
+            images: fileNames || candidate.images,
+            contacts: dto.contacts || candidate.contacts,
+            starRating: dto.starRating || candidate.starRating
+        }, {where: {id: dto.id}});
+        return {message: 'Successfully updated'};
+    }
 }

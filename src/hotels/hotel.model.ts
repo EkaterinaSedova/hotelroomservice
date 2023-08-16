@@ -27,7 +27,7 @@ export class Hotel extends Model<Hotel, HotelCreationAttrs> {
     images: string[];
 
     @Column({type: DataType.INTEGER, allowNull: false, field: 'star_rating'})
-    starRating: string;
+    starRating: number;
 
     @Column({type: DataType.STRING, unique: true, allowNull: false})
     contacts: string;

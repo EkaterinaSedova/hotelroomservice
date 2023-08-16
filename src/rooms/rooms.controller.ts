@@ -23,6 +23,7 @@ import {
 import {Room} from "./room.model";
 import {FilesInterceptor} from "@nestjs/platform-express";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {UpdateRoomDto} from "./dto/update-room.dto";
 
 @ApiTags('Room')
 @Controller('rooms')
@@ -82,5 +83,16 @@ export class RoomsController {
     @Get('/hotel/:id')
     getRoomsByHotelId(@Param() params: any) {
         return this.roomsService.getRoomsByHotelId(params.id)
+    }
+
+    @ApiOperation({
+        summary: 'Update room'
+    })
+    @ApiConsumes('multipart/form-data')
+    @UseInterceptors(FilesInterceptor('images'))
+    @Post('/update')
+    updateRoom(@Body() dto: UpdateRoomDto,
+               @UploadedFiles() images) {
+        return this.roomsService.updateRoom(dto, images);
     }
 }

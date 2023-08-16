@@ -6,6 +6,8 @@ import {HotelsService} from "../hotels/hotels.service";
 import {Hotel} from "../hotels/hotel.model";
 import {FilesService} from "../files/files.service";
 import {Booking} from "../bookings/booking.model";
+import {UpdateUserDto} from "../users/dto/update-user.dto";
+import {UpdateRoomDto} from "./dto/update-room.dto";
 
 @Injectable()
 export class RoomsService {
@@ -74,5 +76,24 @@ export class RoomsService {
         const rooms = await this.roomRepository.findAll({where: {hotelId}});
         return rooms;
     }
+
+    async updateRoom(dto: UpdateRoomDto, images: any[]) {
+        const candidate = await this.roomRepository.findByPk(dto.id);
+        let fileNames = [];
+        for(let i = 0; i < images.length; i++)
+        {
+            fileNames.push(await this.fileService.createImage(images[i]));
+        }
+        if(!fileNames.length) fileNames = null;
+        let optionsJSON = null;
+        if(dto.options) optionsJSON = JSON.parse(dto.options);
+        const room = await this.roomRepository.update({
+            options: optionsJSON || candidate.options,
+            images: fileNames || candidate.images
+        }, {where: {id: dto.id}});
+
+        return {message: 'Successfully updated'}
+    }
+
 
 }

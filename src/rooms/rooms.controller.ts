@@ -1,8 +1,19 @@
-import {Body, Controller, Delete, Get, Param, Post, Query, UploadedFiles, UseInterceptors} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Query,
+    UploadedFiles,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
 import {RoomsService} from "./rooms.service";
 import {CreateRoomDto} from "./dto/create-room.dto";
 import {
-    ApiBadRequestResponse, ApiConsumes,
+    ApiBadRequestResponse, ApiBearerAuth, ApiConsumes,
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
@@ -11,6 +22,7 @@ import {
 } from "@nestjs/swagger";
 import {Room} from "./room.model";
 import {FilesInterceptor} from "@nestjs/platform-express";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @ApiTags('Room')
 @Controller('rooms')
@@ -21,6 +33,8 @@ export class RoomsController {
     @ApiOperation({summary: 'Create room'})
     @ApiCreatedResponse({type: Room})
     @ApiConsumes('multipart/form-data')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
     @UseInterceptors(FilesInterceptor('images'))
     @Post()
     create(@Body() dto: CreateRoomDto,
@@ -51,6 +65,8 @@ export class RoomsController {
         name: 'id',
         description: 'Room ID',
     })
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
     @Delete('/:id')
     deleteRoom(@Param() params: any) {
         return this.roomsService.deleteRoom(params.id)
@@ -63,7 +79,7 @@ export class RoomsController {
         name: 'id',
         description: 'Hotel ID',
     })
-    @Delete('/:id')
+    @Get('/hotel/:id')
     getRoomsByHotelId(@Param() params: any) {
         return this.roomsService.getRoomsByHotelId(params.id)
     }

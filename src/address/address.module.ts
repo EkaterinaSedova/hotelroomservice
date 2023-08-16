@@ -7,10 +7,11 @@ import {HotelsModule} from "../hotels/hotels.module";
 import {RoomsModule} from "../rooms/rooms.module";
 import {Room} from "../rooms/room.model";
 import {Hotel} from "../hotels/hotel.model";
+import {JwtService} from "@nestjs/jwt";
 
 @Module({
   controllers: [AddressController],
-  providers: [AddressService],
+  providers: [AddressService, JwtService],
   imports: [
     SequelizeModule.forFeature([Address, Room, Hotel]),
   ],

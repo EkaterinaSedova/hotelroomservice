@@ -40,7 +40,7 @@ export class AddressService {
                                 )
                         ) THEN 'Not available'
                         ELSE 'Available'
-                    END AS availability_status
+                    END AS "availabilityStatus"
             FROM rooms, addresses
                 WHERE addresses.id = rooms.address_id AND addresses.city LIKE '${query.city}'
                 AND rooms."options"->>'fridge' LIKE '${query.fridge}'
@@ -71,7 +71,7 @@ export class AddressService {
                                            )
                                    ) THEN 'Not available'
                                ELSE 'Available'
-                               END AS availability_status
+                               END AS "availabilityStatus"
                     FROM rooms, addresses
                     WHERE addresses.id = rooms.address_id AND addresses.city LIKE '${query.city}'
                       AND rooms."options"->>'fridge' LIKE '${query.fridge}'
@@ -107,7 +107,7 @@ export class AddressService {
                                                 )
                                        ) THEN 'Not available'
                                    ELSE 'Available'
-                                   END AS availability_status
+                                   END AS "availabilityStatus"
                         FROM rooms, addresses
                         WHERE addresses.id = rooms.address_id AND addresses.country LIKE '${query.country}'
                           AND rooms."options"->>'fridge' LIKE '${query.fridge}'
@@ -138,7 +138,7 @@ export class AddressService {
                                            )
                                    ) THEN 'Not available'
                                ELSE 'Available'
-                               END AS availability_status
+                               END AS "availabilityStatus"
                     FROM rooms, addresses
                     WHERE addresses.id = rooms.address_id AND addresses.country LIKE '${query.country}'
                       AND rooms."options"->>'fridge' LIKE '${query.fridge}'

@@ -1,6 +1,6 @@
-import {Body, Controller, Delete, Get, Param, Post, UploadedFiles, UseInterceptors} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, UploadedFiles, UseGuards, UseInterceptors} from '@nestjs/common';
 import {
-    ApiBadRequestResponse, ApiConsumes,
+    ApiBadRequestResponse, ApiBearerAuth, ApiConsumes,
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
@@ -11,6 +11,7 @@ import {HotelsService} from "./hotels.service";
 import {Hotel} from "./hotel.model";
 import {CreateHotelDto} from "./dto/create-hotel.dto";
 import {FilesInterceptor} from "@nestjs/platform-express";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @ApiTags('Hotel')
 @Controller('hotels')
@@ -20,6 +21,8 @@ export class HotelsController {
     @ApiOperation({summary: 'Create hotel'})
     @ApiCreatedResponse({type: Hotel})
     @ApiConsumes('multipart/form-data')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
     @UseInterceptors(FilesInterceptor('images'))
     @Post()
     create(@Body() hotelDto: CreateHotelDto,
@@ -71,6 +74,8 @@ export class HotelsController {
         name: 'id',
         description: 'Hotel ID'
     })
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
     @Delete('/:id')
     deleteHotel(@Param() params: any) {
         return this.hotelsService.deleteHotel(params.id);

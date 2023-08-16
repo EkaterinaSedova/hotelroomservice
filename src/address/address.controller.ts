@@ -1,8 +1,17 @@
-import {Body, Controller, Delete, Get, Param, Post, Query} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Query, UseGuards} from '@nestjs/common';
 import {AddressService} from "./address.service";
-import {ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags} from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiQuery,
+    ApiTags
+} from "@nestjs/swagger";
 import {Address} from "./address.model";
 import {CreateAddressDto} from "./dto/create-address.dto";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 
 @ApiTags('Address')
 @Controller('address')
@@ -14,6 +23,8 @@ export class AddressController {
         summary: 'Create address'
     })
     @ApiCreatedResponse({type: Address})
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
     @Post()
     create(@Body() dto: CreateAddressDto) {
         return this.addressesService.createAddress(dto);
@@ -104,6 +115,8 @@ export class AddressController {
     @ApiOperation({
         summary: 'Delete address by address ID'
     })
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
     @Delete('/:id')
     deleteAddress(@Param() params: any) {
         return this.addressesService.deleteAddress(params.id)

@@ -3,6 +3,7 @@ import {InjectModel} from "@nestjs/sequelize";
 import {User} from "./user.model";
 import {CreateUserDto} from "./dto/create-user.dto";
 import * as http from "http";
+import {UpdateUserDto} from "./dto/update-user.dto";
 
 @Injectable()
 export class UsersService {
@@ -22,5 +23,20 @@ export class UsersService {
         const user = await this.userRepository.findOne({where: {id}})
         if (!user) throw new HttpException("User not found", HttpStatus.BAD_REQUEST)
         return user;
+    }
+
+    async changeRole(id) {
+        const candidate = await this.userRepository.findByPk(id);
+        const user = await this.userRepository.update({
+            isAdmin: !candidate.isAdmin
+        }, {where: {id}})
+        return {message: 'Successfully updated'};
+    }
+
+    async updateUsername(dto: UpdateUserDto) {
+        const candidate = await this.userRepository.update({
+            name: dto.name
+        }, {where: {id: dto.id}});
+        return {message: 'Successfully updated'}
     }
 }

@@ -10,6 +10,8 @@ import {
 import {UsersService} from "./users.service";
 import {User} from "./user.model";
 import {CreateUserDto} from "./dto/create-user.dto";
+import {ChangeUserroleDto} from "./dto/change-userrole.dto";
+import {UpdateUserDto} from "./dto/update-user.dto";
 
 @ApiTags('User')
 @Controller('users')
@@ -40,5 +42,21 @@ export class UsersController {
     @Get('/:id')
     getUserById(@Param() params: any) {
         return this.usersService.getUserById(params.id);
+    }
+
+    @ApiOperation({
+        summary: 'Change role of User with current ID'
+    })
+    @Post('/changeRole')
+    changeRole(@Body() dto: ChangeUserroleDto) {
+        return this.usersService.changeRole(dto.id);
+    }
+
+    @ApiOperation({
+        summary: 'Update username'
+    })
+    @Post('/update')
+    updateUser(@Body() dto: UpdateUserDto) {
+        return this.usersService.updateUsername(dto);
     }
 }

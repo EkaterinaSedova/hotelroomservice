@@ -79,6 +79,7 @@ export class RoomsService {
 
     async updateRoom(dto: UpdateRoomDto, images: any[]) {
         const candidate = await this.roomRepository.findByPk(dto.id);
+        if(!candidate) throw new HttpException('Address with such ID not found', HttpStatus.BAD_REQUEST);
         let fileNames = [];
         for(let i = 0; i < images.length; i++)
         {

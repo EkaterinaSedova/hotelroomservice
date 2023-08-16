@@ -68,6 +68,7 @@ export class HotelsService {
         }
         if(!fileNames.length) fileNames = null;
         const candidate = await this.hotelRepository.findByPk(dto.id);
+        if(!candidate) throw new HttpException('Hotel with such ID not found', HttpStatus.BAD_REQUEST);
         const hotel = await this.hotelRepository.update({
             name: dto.name || candidate.name,
             description: dto.description || candidate.description,

@@ -27,6 +27,7 @@ export class UsersService {
 
     async changeRole(id) {
         const candidate = await this.userRepository.findByPk(id);
+        if(!candidate) throw new HttpException('User with such ID not found', HttpStatus.BAD_REQUEST);
         const user = await this.userRepository.update({
             isAdmin: !candidate.isAdmin
         }, {where: {id}})
@@ -37,6 +38,7 @@ export class UsersService {
         const candidate = await this.userRepository.update({
             name: dto.name
         }, {where: {id: dto.id}});
+        if(!candidate) throw new HttpException('User with such ID not found', HttpStatus.BAD_REQUEST);
         return {message: 'Successfully updated'}
     }
 }

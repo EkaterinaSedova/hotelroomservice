@@ -4,6 +4,7 @@ import {Feedback} from "./feedback.model";
 import {CreateFeedbackDto} from "./dto/create-feedback.dto";
 import {Sequelize} from "sequelize-typescript";
 import {QueryTypes} from "sequelize";
+import {UpdateFeedbackDto} from "./dto/update-feedback.dto";
 
 @Injectable()
 export class FeedbacksService {
@@ -41,5 +42,15 @@ export class FeedbacksService {
         return feedbacks;
     }
 
+    async updateFeedback(dto: UpdateFeedbackDto) {
+        const candidate = await this.feedbackRepository.findByPk(dto.id);
+        if(!candidate) throw new HttpException('Feedback with such ID not found', HttpStatus.BAD_REQUEST);
+        const feedback = await this.feedbackRepository.update({
+            message: dto.message || candidate.message,
+            rate: dto.rate || candidate.rate
+            },
+            {where: {id: dto.id}});
+        return {message: 'Successfully updated'}
+    }
 
 }

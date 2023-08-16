@@ -12,6 +12,7 @@ import {
 import {Address} from "./address.model";
 import {CreateAddressDto} from "./dto/create-address.dto";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {UpdateAddressDto} from "./dto/update-address.dto";
 
 @ApiTags('Address')
 @Controller('address')
@@ -155,5 +156,15 @@ export class AddressController {
     @Get('/hotels/city/:page')
     getHotelsByCity(@Param() params: any, @Query() query: any) {
         return this.addressesService.getHotelsByCity(query, params.page)
+    }
+
+    @ApiOperation({
+        summary: 'Update address'
+    })
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
+    @Post('/update')
+    updateAddress(@Body() dto: UpdateAddressDto) {
+        return this.addressesService.updateAddress(dto)
     }
 }

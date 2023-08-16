@@ -84,6 +84,8 @@ export class HotelsController {
 
     @ApiOperation({summary: 'Update hotel'})
     @ApiConsumes('multipart/form-data')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
     @UseInterceptors(FilesInterceptor('images'))
     @Post('/update')
     updateHotel(@Body() dto: UpdateHotelDto,

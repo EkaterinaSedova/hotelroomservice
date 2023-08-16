@@ -88,6 +88,8 @@ export class RoomsController {
     @ApiOperation({
         summary: 'Update room'
     })
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
     @ApiConsumes('multipart/form-data')
     @UseInterceptors(FilesInterceptor('images'))
     @Post('/update')

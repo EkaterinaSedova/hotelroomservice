@@ -6,6 +6,7 @@ import {Room} from "../rooms/room.model";
 import {Sequelize} from "sequelize-typescript";
 import {QueryTypes} from "sequelize";
 import {Hotel} from "../hotels/hotel.model";
+import {UpdateAddressDto} from "./dto/update-address.dto";
 
 @Injectable()
 export class AddressService {
@@ -197,5 +198,18 @@ export class AddressService {
                 type: QueryTypes.SELECT
             })
         return hotels;
+    }
+
+    async updateAddress(dto: UpdateAddressDto) {
+        const candidate = await this.addressRepository.findByPk(dto.id);
+        if(!candidate) throw new HttpException('Address with such ID not found', HttpStatus.BAD_REQUEST);
+        const address = await this.addressRepository.update({
+            country: dto.country || candidate.country,
+            city: dto.city || candidate.city,
+            address: dto.address || candidate.address,
+            },
+            {where: {id: dto.id}});
+
+        return {message: 'Successfully updated'};
     }
 }

@@ -4,6 +4,7 @@ import {ApiBearerAuth, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags} from
 import {Feedback} from "./feedback.model";
 import {CreateFeedbackDto} from "./dto/create-feedback.dto";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {UpdateFeedbackDto} from "./dto/update-feedback.dto";
 
 @ApiTags('Feedback')
 @Controller('feedbacks')
@@ -53,5 +54,13 @@ export class FeedbacksController {
         return this.feedbacksService.getFeedbackByHotelId(params.hotelId)
     }
 
+
+    @ApiOperation({summary: 'Update feedback'})
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
+    @Post('/update')
+    updateFeedback(@Body() dto: UpdateFeedbackDto) {
+        return this.feedbacksService.updateFeedback(dto);
+    }
 
 }

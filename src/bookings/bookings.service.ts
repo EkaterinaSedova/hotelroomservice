@@ -10,8 +10,7 @@ export class BookingsService {
   ) {}
 
   async createBooking(dto: CreateBookingDto) {
-    const booking = await this.bookingRepository.create(dto);
-    return booking;
+    return await this.bookingRepository.create(dto);
   }
 
   async deleteBooking(id) {
@@ -22,16 +21,14 @@ export class BookingsService {
   }
 
   async getBookingsByRoomId(roomId) {
-    const bookings = await this.bookingRepository.findAll({
+    return await this.bookingRepository.findAll({
       where: { roomId },
     });
-    return bookings;
   }
 
   async getBookingsByHotelId(hotelId) {
-    const bookings = await this.bookingRepository.findAll({
+    return await this.bookingRepository.findAll({
       where: { hotelId },
     });
-    return bookings;
   }
 }

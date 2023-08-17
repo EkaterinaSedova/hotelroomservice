@@ -26,7 +26,7 @@ export class FeedbacksService {
   }
 
   async getAverageRating(hotelId) {
-    const averageRating = await this.sequelize.query(
+    return await this.sequelize.query(
       `
                 SELECT AVG(feedbacks.rate) AS "averageRating"
                 FROM feedbacks 
@@ -37,14 +37,12 @@ export class FeedbacksService {
         type: QueryTypes.SELECT,
       },
     );
-    return averageRating;
   }
 
   async getFeedbackByHotelId(hotelId) {
-    const feedbacks = await this.feedbackRepository.findAll({
+    return await this.feedbackRepository.findAll({
       where: { hotelId },
     });
-    return feedbacks;
   }
 
   async updateFeedback(dto: UpdateFeedbackDto) {

@@ -26,13 +26,12 @@ export class RoomsService {
       fileNames.push(await this.fileService.createImage(images[i]));
     }
     const optionsJSON = JSON.parse(dto.options);
-    const room = await this.roomRepository.create({
+    return await this.roomRepository.create({
       ...dto,
       options: optionsJSON,
       addressId: addressId,
       images: fileNames,
     });
-    return room;
   }
 
   async getAllRooms(params, query) {
@@ -41,7 +40,7 @@ export class RoomsService {
     const fridge = query.fridge;
     const offset = params.page * limit - limit;
     if (query.fridge != null) {
-      const rooms = await this.roomRepository.findAll({
+      return await this.roomRepository.findAll({
         where: {
           options: {
             places: places,
@@ -52,9 +51,8 @@ export class RoomsService {
         offset,
         order: [['options.price', 'ASC']],
       });
-      return rooms;
     }
-    const rooms = await this.roomRepository.findAll({
+    return await this.roomRepository.findAll({
       where: {
         options: {
           places: places,
@@ -65,7 +63,6 @@ export class RoomsService {
       order: [['options.price', 'ASC']],
       include: { all: true },
     });
-    return rooms;
   }
 
   async deleteRoom(id) {
@@ -79,8 +76,7 @@ export class RoomsService {
   }
 
   async getRoomsByHotelId(hotelId) {
-    const rooms = await this.roomRepository.findAll({ where: { hotelId } });
-    return rooms;
+    return await this.roomRepository.findAll({ where: { hotelId } });
   }
 
   async updateRoom(dto: UpdateRoomDto, images: any[]) {

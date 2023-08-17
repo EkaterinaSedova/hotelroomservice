@@ -18,15 +18,14 @@ export class AddressService {
   ) {}
 
   async createAddress(dto: CreateAddressDto) {
-    const address = await this.addressRepository.create(dto);
-    return address;
+    return await this.addressRepository.create(dto);
   }
 
   async getRoomsByCity(query, page) {
     const limit = 10;
     const offset = page * limit - limit;
     if (query.price === 'desc') {
-      const rooms = await this.sequelize.query(
+      return await this.sequelize.query(
         `
             SELECT rooms.id,
                 CASE
@@ -57,9 +56,8 @@ export class AddressService {
           type: QueryTypes.SELECT,
         },
       );
-      return rooms;
     }
-    const rooms = await this.sequelize.query(
+    return await this.sequelize.query(
       `
                     SELECT rooms.id,
                            CASE
@@ -90,14 +88,13 @@ export class AddressService {
         type: QueryTypes.SELECT,
       },
     );
-    return rooms;
   }
 
   async getRoomsByCountry(query, page) {
     const limit = 10;
     const offset = page * limit - limit;
     if (query.price === 'desc') {
-      const rooms = await this.sequelize.query(
+      return await this.sequelize.query(
         `
                         SELECT rooms.id,
                                CASE
@@ -128,9 +125,8 @@ export class AddressService {
           type: QueryTypes.SELECT,
         },
       );
-      return rooms;
     }
-    const rooms = await this.sequelize.query(
+    return await this.sequelize.query(
       `
                     SELECT rooms.id,
                            CASE
@@ -161,7 +157,6 @@ export class AddressService {
         type: QueryTypes.SELECT,
       },
     );
-    return rooms;
   }
 
   async deleteAddress(id) {
@@ -177,7 +172,7 @@ export class AddressService {
   async getHotelsByCountry(query, page) {
     const limit = 10;
     const offset = page * limit - limit;
-    const hotels = await this.sequelize.query(
+    return await this.sequelize.query(
       `
                 SELECT hotels.id, hotels."name", hotels.description, hotels.star_rating, hotels.contacts
                 FROM hotels, addresses
@@ -191,13 +186,12 @@ export class AddressService {
         type: QueryTypes.SELECT,
       },
     );
-    return hotels;
   }
 
   async getHotelsByCity(query, page) {
     const limit = 10;
     const offset = page * limit - limit;
-    const hotels = await this.sequelize.query(
+    return await this.sequelize.query(
       `
                 SELECT hotels.id, hotels."name", hotels.description, hotels.star_rating, hotels.contacts
                 FROM hotels, addresses
@@ -211,7 +205,6 @@ export class AddressService {
         type: QueryTypes.SELECT,
       },
     );
-    return hotels;
   }
 
   async updateAddress(dto: UpdateAddressDto) {

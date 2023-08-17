@@ -21,11 +21,10 @@ export class HotelsService {
     for (let i = 0; i < images.length; i++) {
       fileNames.push(await this.fileService.createImage(images[i]));
     }
-    const hotel = await this.hotelRepository.create({
+    return await this.hotelRepository.create({
       ...dto,
       images: fileNames,
     });
-    return hotel;
   }
 
   async getHotelById(id) {
@@ -41,20 +40,12 @@ export class HotelsService {
   async getAllHotels(page) {
     const limit = 2;
     const offset = page * limit - limit;
-    const hotels = await this.hotelRepository.findAll({
+    return await this.hotelRepository.findAll({
       limit,
       offset,
       include: { all: true },
       where: {},
     });
-    return hotels;
-  }
-
-  async findAddressByHotelId(id) {
-    const hotel = await this.hotelRepository.findOne({
-      where: { id },
-    });
-    return hotel.addressId;
   }
 
   async deleteHotel(id) {

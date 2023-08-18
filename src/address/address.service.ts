@@ -21,7 +21,6 @@ export class AddressService {
     return await this.addressRepository.create(dto);
   }
 
-
   async getRooms(query, page) {
     const limit = 10;
     const offset = page * limit - limit;

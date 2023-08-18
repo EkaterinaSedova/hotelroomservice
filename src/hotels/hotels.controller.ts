@@ -60,24 +60,6 @@ export class HotelsController {
   }
 
   @ApiOperation({
-    summary: 'Get hotels by current page',
-  })
-  @ApiOkResponse({
-    description: 'Success',
-  })
-  @ApiBadRequestResponse({
-    description: 'Bad request: hotel not found',
-  })
-  @ApiParam({
-    name: 'page',
-    description: 'Current page',
-  })
-  @Get('/page/:page')
-  getHotels(@Param() params: any) {
-    return this.hotelsService.getAllHotels(params.page);
-  }
-
-  @ApiOperation({
     summary: 'Delete hotel',
   })
   @ApiParam({

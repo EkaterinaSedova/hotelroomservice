@@ -5,7 +5,6 @@ import {
   Get,
   Param,
   Post,
-  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -16,7 +15,6 @@ import {
   ApiBearerAuth,
   ApiConsumes,
   ApiCreatedResponse,
-  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiTags,
@@ -40,21 +38,6 @@ export class RoomsController {
   @Post()
   create(@Body() dto: CreateRoomDto, @UploadedFiles() images) {
     return this.roomsService.createRoom(dto, images);
-  }
-
-  @ApiOperation({
-    summary: 'Get room by current page',
-  })
-  @ApiOkResponse({
-    description: 'Success',
-  })
-  @ApiParam({
-    name: 'page',
-    description: 'Current page',
-  })
-  @Get('/page/:page')
-  getRooms(@Param() params: any, @Query() query: any) {
-    return this.roomsService.getAllRooms(params, query);
   }
 
   @ApiOperation({
@@ -93,5 +76,17 @@ export class RoomsController {
   @Post('/update')
   updateRoom(@Body() dto: UpdateRoomDto, @UploadedFiles() images) {
     return this.roomsService.updateRoom(dto, images);
+  }
+
+  @ApiOperation({
+    summary: 'Get room by ID',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Room ID',
+  })
+  @Get('/:id')
+  getRoom(@Param() params: any) {
+    return this.roomsService.getRoomById(params.id);
   }
 }

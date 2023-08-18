@@ -61,27 +61,27 @@ export class AddressController {
   @ApiQuery({
     name: 'city',
     description: 'Current city',
-    required: false
+    required: false,
   })
   @ApiQuery({
     name: 'country',
     description: 'Current country',
-    required: false
+    required: false,
   })
   @ApiQuery({
     name: 'places',
     description: 'Places in room',
-    required: false
+    required: false,
   })
   @ApiQuery({
     name: 'fridge',
     description: 'Is there a fridge in room? (true/false)',
-    required: false
+    required: false,
   })
   @ApiQuery({
     name: 'price',
     description: 'asc/desc',
-    required: false
+    required: false,
   })
   @Get('/rooms/:page')
   getRooms(@Param() params: any, @Query() query: any) {
@@ -105,12 +105,12 @@ export class AddressController {
   @ApiQuery({
     name: 'country',
     description: 'Country',
-    required: false
+    required: false,
   })
   @ApiQuery({
     name: 'city',
     description: 'City',
-    required: false
+    required: false,
   })
   @ApiParam({
     name: 'page',

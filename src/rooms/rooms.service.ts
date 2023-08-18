@@ -34,37 +34,6 @@ export class RoomsService {
     });
   }
 
-  async getAllRooms(params, query) {
-    const limit = 2;
-    const places = query.places;
-    const fridge = query.fridge;
-    const offset = params.page * limit - limit;
-    if (query.fridge != null) {
-      return await this.roomRepository.findAll({
-        where: {
-          options: {
-            places: places,
-            fridge: fridge,
-          },
-        },
-        limit,
-        offset,
-        order: [['options.price', 'ASC']],
-      });
-    }
-    return await this.roomRepository.findAll({
-      where: {
-        options: {
-          places: places,
-        },
-      },
-      limit,
-      offset,
-      order: [['options.price', 'ASC']],
-      include: { all: true },
-    });
-  }
-
   async deleteRoom(id) {
     const room = await this.roomRepository.destroy({ where: { id } });
     if (!room)
@@ -73,6 +42,10 @@ export class RoomsService {
       where: { roomId: id },
     });
     return { message: 'Room successfully deleted' };
+  }
+
+  async getRoomById(id) {
+    return this.roomRepository.findByPk(id, { include: { all: true } });
   }
 
   async getRoomsByHotelId(hotelId) {

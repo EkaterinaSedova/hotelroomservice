@@ -31,4 +31,8 @@ export class BookingsService {
       where: { hotelId },
     });
   }
+
+  async getBookingsOfUser(userId) {
+    return await this.bookingRepository.findAll({ where: { userId } });
+  }
 }

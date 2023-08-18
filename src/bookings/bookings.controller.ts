@@ -68,4 +68,16 @@ export class BookingsController {
   getBookingsByRoom(@Param() params: any) {
     return this.bookingsService.getBookingsByRoomId(params.id);
   }
+
+  @ApiOperation({
+    summary: "Get bookings of user by user's ID",
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'User ID',
+  })
+  @Get('/user/:id')
+  getBookingsOfUser(@Param() params: any) {
+    return this.bookingsService.getBookingsOfUser(params.id);
+  }
 }

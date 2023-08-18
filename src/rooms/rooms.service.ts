@@ -51,7 +51,7 @@ export class RoomsService {
     return this.roomRepository.findByPk(id, { include: { all: true } });
   }
 
-  async getRooms(query, page) {
+  async getAvailableRooms(query, page) {
     const limit = 10;
     const offset = page * limit - limit;
     let sql = `SELECT rooms.id, rooms."options", rooms.images
@@ -84,6 +84,12 @@ export class RoomsService {
       plain: false,
       type: QueryTypes.SELECT,
     });
+  }
+
+  async getAllRooms(page) {
+    const limit = 10;
+    const offset = limit * page - limit;
+    return this.roomRepository.findAll({limit, offset, include: {all: true}});
   }
 
   async getRoomsByHotelId(hotelId) {

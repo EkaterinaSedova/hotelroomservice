@@ -58,12 +58,12 @@ export class RoomsController {
     summary: 'Get room in hotel by hotel ID',
   })
   @ApiParam({
-    name: 'id',
+    name: 'hotelId',
     description: 'Hotel ID',
   })
-  @Get('/hotel/:id')
+  @Get('/hotel/:hotelId')
   getRoomsByHotelId(@Param() params: any) {
-    return this.roomsService.getRoomsByHotelId(params.id);
+    return this.roomsService.getRoomsByHotelId(params.hotelId);
   }
 
   @ApiOperation({
@@ -85,13 +85,13 @@ export class RoomsController {
     name: 'id',
     description: 'Room ID',
   })
-  @Get('/:id')
+  @Get('/room/:id')
   getRoom(@Param() params: any) {
     return this.roomsService.getRoomById(params.id);
   }
 
   @ApiOperation({
-    summary: 'Get rooms',
+    summary: 'Get available rooms',
   })
   @ApiOkResponse({
     description: 'Success',
@@ -134,7 +134,20 @@ export class RoomsController {
     required: false,
   })
   @Get('/:page')
-  getRooms(@Param() params: any, @Query() query: any) {
-    return this.roomsService.getRooms(query, params.page);
+  getAvailableRooms(@Param() params: any, @Query() query: any) {
+    return this.roomsService.getAvailableRooms(query, params.page);
+  }
+
+
+  @ApiOperation({
+    summary: 'Get all rooms'
+  })
+  @ApiParam({
+    name: 'page',
+    description: 'Current page'
+  })
+  @Get('/all/:page')
+  getAllRooms(@Param() params: any) {
+    return this.roomsService.getAllRooms(params.page)
   }
 }

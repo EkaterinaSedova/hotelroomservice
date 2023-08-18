@@ -6,6 +6,8 @@ import { Room } from '../rooms/room.model';
 import { FilesService } from '../files/files.service';
 import { Booking } from '../bookings/booking.model';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
+import {QueryTypes} from "sequelize";
+import {Sequelize} from "sequelize-typescript";
 
 @Injectable()
 export class HotelsService {
@@ -14,6 +16,7 @@ export class HotelsService {
     @InjectModel(Room) private roomRepository: typeof Room,
     @InjectModel(Booking) private bookingRepository: typeof Booking,
     private fileService: FilesService,
+    private sequelize: Sequelize
   ) {}
 
   async createHotel(dto: CreateHotelDto, images: any[]) {
@@ -35,17 +38,6 @@ export class HotelsService {
     if (!hotel)
       throw new HttpException('Hotel not found', HttpStatus.BAD_REQUEST);
     return hotel;
-  }
-
-  async getAllHotels(page) {
-    const limit = 2;
-    const offset = page * limit - limit;
-    return await this.hotelRepository.findAll({
-      limit,
-      offset,
-      include: { all: true },
-      where: {},
-    });
   }
 
   async deleteHotel(id) {
@@ -82,5 +74,21 @@ export class HotelsService {
       { where: { id: dto.id } },
     );
     return { message: 'Successfully updated' };
+  }
+
+  async getHotels(query, page) {
+    const limit = 10;
+    const offset = page * limit - limit;
+    let sql = `SELECT hotels.id, hotels."name", hotels.description, hotels.star_rating, hotels.contacts
+                 FROM hotels,
+                      addresses
+                 WHERE addresses.id = hotels.address_id`;
+    if (query.country) sql += ` AND addresses.country LIKE '${query.country}'`;
+    if (query.city) sql += ` AND addresses.city LIKE '${query.city}'`;
+    sql += ` LIMIT ${limit} OFFSET ${offset}`;
+    return await this.sequelize.query(sql, {
+      plain: false,
+      type: QueryTypes.SELECT,
+    });
   }
 }

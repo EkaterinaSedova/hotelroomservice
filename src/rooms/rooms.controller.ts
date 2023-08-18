@@ -4,7 +4,7 @@ import {
   Delete,
   Get,
   Param,
-  Post,
+  Post, Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -14,9 +14,9 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import {
   ApiBearerAuth,
   ApiConsumes,
-  ApiCreatedResponse,
+  ApiCreatedResponse, ApiOkResponse,
   ApiOperation,
-  ApiParam,
+  ApiParam, ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { Room } from './room.model';
@@ -88,5 +88,53 @@ export class RoomsController {
   @Get('/:id')
   getRoom(@Param() params: any) {
     return this.roomsService.getRoomById(params.id);
+  }
+
+  @ApiOperation({
+    summary: 'Get rooms',
+  })
+  @ApiOkResponse({
+    description: 'Success',
+  })
+  @ApiQuery({
+    name: 'inDate',
+    description: 'in date',
+  })
+  @ApiQuery({
+    name: 'outDate',
+    description: 'out date',
+  })
+  @ApiParam({
+    name: 'page',
+    description: 'Current page',
+  })
+  @ApiQuery({
+    name: 'city',
+    description: 'Current city',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'country',
+    description: 'Current country',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'places',
+    description: 'Places in room',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'fridge',
+    description: 'Is there a fridge in room? (true/false)',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'price',
+    description: 'asc/desc',
+    required: false,
+  })
+  @Get('/:page')
+  getRooms(@Param() params: any, @Query() query: any) {
+    return this.roomsService.getRooms(query, params.page);
   }
 }

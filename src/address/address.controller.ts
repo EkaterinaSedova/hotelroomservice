@@ -39,55 +39,6 @@ export class AddressController {
     return this.addressesService.createAddress(dto);
   }
 
-  @ApiTags('Room')
-  @ApiOperation({
-    summary: 'Get rooms',
-  })
-  @ApiOkResponse({
-    description: 'Success',
-  })
-  @ApiQuery({
-    name: 'inDate',
-    description: 'in date',
-  })
-  @ApiQuery({
-    name: 'outDate',
-    description: 'out date',
-  })
-  @ApiParam({
-    name: 'page',
-    description: 'Current page',
-  })
-  @ApiQuery({
-    name: 'city',
-    description: 'Current city',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'country',
-    description: 'Current country',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'places',
-    description: 'Places in room',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'fridge',
-    description: 'Is there a fridge in room? (true/false)',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'price',
-    description: 'asc/desc',
-    required: false,
-  })
-  @Get('/rooms/:page')
-  getRooms(@Param() params: any, @Query() query: any) {
-    return this.addressesService.getRooms(query, params.page);
-  }
-
   @ApiOperation({
     summary: 'Delete address by address ID',
   })
@@ -96,29 +47,6 @@ export class AddressController {
   @Delete('/:id')
   deleteAddress(@Param() params: any) {
     return this.addressesService.deleteAddress(params.id);
-  }
-
-  @ApiTags('Hotel')
-  @ApiOperation({
-    summary: 'Get hotels',
-  })
-  @ApiQuery({
-    name: 'country',
-    description: 'Country',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'city',
-    description: 'City',
-    required: false,
-  })
-  @ApiParam({
-    name: 'page',
-    description: 'Current page',
-  })
-  @Get('/hotels/:page')
-  getHotels(@Param() params: any, @Query() query: any) {
-    return this.addressesService.getHotels(query, params.page);
   }
 
   @ApiOperation({

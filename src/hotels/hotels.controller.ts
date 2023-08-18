@@ -4,7 +4,7 @@ import {
   Delete,
   Get,
   Param,
-  Post,
+  Post, Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -16,7 +16,7 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiParam,
+  ApiParam, ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { HotelsService } from './hotels.service';
@@ -54,7 +54,7 @@ export class HotelsController {
     name: 'id',
     description: 'Gets the hotel id',
   })
-  @Get('/:id')
+  @Get('/hotel/:id')
   getHotelById(@Param() params: any) {
     return this.hotelsService.getHotelById(params.id);
   }
@@ -81,5 +81,27 @@ export class HotelsController {
   @Post('/update')
   updateHotel(@Body() dto: UpdateHotelDto, @UploadedFiles() images) {
     return this.hotelsService.updateHotel(dto, images);
+  }
+
+  @ApiOperation({
+    summary: 'Get hotels',
+  })
+  @ApiQuery({
+    name: 'country',
+    description: 'Country',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'city',
+    description: 'City',
+    required: false,
+  })
+  @ApiParam({
+    name: 'page',
+    description: 'Current page',
+  })
+  @Get('/:page')
+  getHotels(@Param() params: any, @Query() query: any) {
+    return this.hotelsService.getHotels(query, params.page);
   }
 }

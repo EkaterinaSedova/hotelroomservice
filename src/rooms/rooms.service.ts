@@ -6,6 +6,8 @@ import { Hotel } from '../hotels/hotel.model';
 import { FilesService } from '../files/files.service';
 import { Booking } from '../bookings/booking.model';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import {QueryTypes} from "sequelize";
+import {Sequelize} from "sequelize-typescript";
 
 @Injectable()
 export class RoomsService {
@@ -14,6 +16,7 @@ export class RoomsService {
     @InjectModel(Hotel) private hotelRepository: typeof Hotel,
     @InjectModel(Booking) private bookingRepository: typeof Booking,
     private fileService: FilesService,
+    private sequelize: Sequelize,
   ) {}
 
   async createRoom(dto: CreateRoomDto, images: any[]) {
@@ -46,6 +49,41 @@ export class RoomsService {
 
   async getRoomById(id) {
     return this.roomRepository.findByPk(id, { include: { all: true } });
+  }
+
+  async getRooms(query, page) {
+    const limit = 10;
+    const offset = page * limit - limit;
+    let sql = `SELECT rooms.id, rooms."options", rooms.images
+            FROM rooms
+            LEFT JOIN bookings 
+	        ON rooms.id = bookings.room_id AND (
+		        ('${query.inDate}' BETWEEN bookings.in_date AND bookings.out_date
+                AND '${query.outDate}' BETWEEN bookings.in_date AND bookings.out_date)
+                OR
+                (bookings.in_date BETWEEN '${query.inDate}' AND '${query.outDate}'
+                OR bookings.out_date BETWEEN '${query.inDate}' AND '${query.outDate}')
+	            ),
+	        addresses
+            WHERE addresses.id = rooms.address_id and bookings.id IS NULL`;
+    if (query.country) sql += ` AND addresses.country LIKE '${query.country}'`;
+    if (query.city) sql += ` AND addresses.city LIKE '${query.city}'`;
+    if (query.fridge)
+      sql += ` AND rooms."options"->>'fridge' LIKE '${query.fridge}'`;
+    if (query.places)
+      sql += ` AND rooms."options"->>'places' LIKE '${query.places}'`;
+    if (query.price === 'desc')
+      sql += ` ORDER BY rooms."options"->'price' DESC
+                    LIMIT ${limit}
+                    OFFSET ${offset}`;
+    else
+      sql += ` ORDER BY rooms."options"->'price'
+                    LIMIT ${limit}
+                    OFFSET ${offset}`;
+    return await this.sequelize.query(sql, {
+      plain: false,
+      type: QueryTypes.SELECT,
+    });
   }
 
   async getRoomsByHotelId(hotelId) {

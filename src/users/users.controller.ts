@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -13,7 +12,6 @@ import { User } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ChangeUserroleDto } from './dto/change-userrole.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('User')
 @Controller('users')
@@ -48,8 +46,6 @@ export class UsersController {
   @ApiOperation({
     summary: 'Change role of User with current ID',
   })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
   @Post('/changeRole')
   changeRole(@Body() dto: ChangeUserroleDto) {
     return this.usersService.changeRole(dto.id);
@@ -58,8 +54,6 @@ export class UsersController {
   @ApiOperation({
     summary: 'Update username',
   })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
   @Post('/update')
   updateUser(@Body() dto: UpdateUserDto) {
     return this.usersService.updateUsername(dto);

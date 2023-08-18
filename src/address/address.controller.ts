@@ -41,10 +41,18 @@ export class AddressController {
 
   @ApiTags('Room')
   @ApiOperation({
-    summary: 'Get rooms in current city',
+    summary: 'Get rooms',
   })
   @ApiOkResponse({
     description: 'Success',
+  })
+  @ApiQuery({
+    name: 'inDate',
+    description: 'in date',
+  })
+  @ApiQuery({
+    name: 'outDate',
+    description: 'out date',
   })
   @ApiParam({
     name: 'page',
@@ -53,70 +61,31 @@ export class AddressController {
   @ApiQuery({
     name: 'city',
     description: 'Current city',
-  })
-  @ApiQuery({
-    name: 'places',
-    description: 'Places in room',
-  })
-  @ApiQuery({
-    name: 'fridge',
-    description: 'Is there a fridge in room? (true/false)',
-  })
-  @ApiQuery({
-    name: 'price',
-    description: 'asc/desc',
-  })
-  @ApiQuery({
-    name: 'inDate',
-    description: 'in date',
-  })
-  @ApiQuery({
-    name: 'outDate',
-    description: 'out date',
-  })
-  @Get('/rooms/city/:page')
-  getRoomsByCity(@Param() params: any, @Query() query: any) {
-    return this.addressesService.getRoomsByCity(query, params.page);
-  }
-
-  @ApiTags('Room')
-  @ApiOperation({
-    summary: 'Get rooms in current country',
-  })
-  @ApiOkResponse({
-    description: 'Success',
-  })
-  @ApiQuery({
-    name: 'inDate',
-    description: 'in date',
-  })
-  @ApiQuery({
-    name: 'outDate',
-    description: 'out date',
-  })
-  @ApiParam({
-    name: 'page',
-    description: 'Current page',
+    required: false
   })
   @ApiQuery({
     name: 'country',
     description: 'Current country',
+    required: false
   })
   @ApiQuery({
     name: 'places',
     description: 'Places in room',
+    required: false
   })
   @ApiQuery({
     name: 'fridge',
     description: 'Is there a fridge in room? (true/false)',
+    required: false
   })
   @ApiQuery({
     name: 'price',
     description: 'asc/desc',
+    required: false
   })
-  @Get('/rooms/country/:page')
-  getRoomsByCountry(@Param() params: any, @Query() query: any) {
-    return this.addressesService.getRoomsByCountry(query, params.page);
+  @Get('/rooms/:page')
+  getRooms(@Param() params: any, @Query() query: any) {
+    return this.addressesService.getRooms(query, params.page);
   }
 
   @ApiOperation({
@@ -131,36 +100,25 @@ export class AddressController {
 
   @ApiTags('Hotel')
   @ApiOperation({
-    summary: 'Get hotels in country',
+    summary: 'Get hotels',
   })
   @ApiQuery({
     name: 'country',
     description: 'Country',
-  })
-  @ApiParam({
-    name: 'page',
-    description: 'Current page',
-  })
-  @Get('/hotels/country/:page')
-  getHotelsByCountry(@Param() params: any, @Query() query: any) {
-    return this.addressesService.getHotelsByCountry(query, params.page);
-  }
-
-  @ApiTags('Hotel')
-  @ApiOperation({
-    summary: 'Get hotels in current city',
+    required: false
   })
   @ApiQuery({
     name: 'city',
     description: 'City',
+    required: false
   })
   @ApiParam({
     name: 'page',
     description: 'Current page',
   })
-  @Get('/hotels/city/:page')
-  getHotelsByCity(@Param() params: any, @Query() query: any) {
-    return this.addressesService.getHotelsByCity(query, params.page);
+  @Get('/hotels/:page')
+  getHotels(@Param() params: any, @Query() query: any) {
+    return this.addressesService.getHotels(query, params.page);
   }
 
   @ApiOperation({

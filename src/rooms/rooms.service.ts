@@ -52,7 +52,7 @@ export class RoomsService {
   }
 
   async getAvailableRooms(query, page) {
-    const limit = 10;
+    const limit = query.limit;
     const offset = page * limit - limit;
     let sql = `SELECT rooms.id, rooms."options", rooms.images
             FROM rooms
@@ -65,7 +65,7 @@ export class RoomsService {
                 OR bookings.out_date BETWEEN '${query.inDate}' AND '${query.outDate}')
 	            ),
 	        addresses
-            WHERE addresses.id = rooms.address_id and bookings.id IS NULL`;
+            WHERE addresses.id = rooms.address_id AND bookings.id IS NULL`;
     if (query.country) sql += ` AND addresses.country LIKE '${query.country}'`;
     if (query.city) sql += ` AND addresses.city LIKE '${query.city}'`;
     if (query.fridge)
@@ -86,14 +86,14 @@ export class RoomsService {
     });
   }
 
-  async getAllRooms(page) {
-    const limit = 10;
+  async getAllRooms(page, limit) {
     const offset = limit * page - limit;
     return this.roomRepository.findAll({limit, offset, include: {all: true}});
   }
 
-  async getRoomsByHotelId(hotelId) {
-    return await this.roomRepository.findAll({ where: { hotelId } });
+  async getRoomsByHotelId(hotelId, page, limit) {
+    const offset = limit * page - limit;
+    return await this.roomRepository.findAll({ limit, offset, where: { hotelId } });
   }
 
   async updateRoom(dto: UpdateRoomDto, images: any[]) {

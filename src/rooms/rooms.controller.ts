@@ -57,13 +57,21 @@ export class RoomsController {
   @ApiOperation({
     summary: 'Get room in hotel by hotel ID',
   })
-  @ApiParam({
+  @ApiQuery({
+    name: 'limit',
+    description: 'limit of elements on the page',
+  })
+  @ApiQuery({
     name: 'hotelId',
     description: 'Hotel ID',
   })
-  @Get('/hotel/:hotelId')
-  getRoomsByHotelId(@Param() params: any) {
-    return this.roomsService.getRoomsByHotelId(params.hotelId);
+  @ApiParam({
+    name: 'page',
+    description: 'Current page',
+  })
+  @Get('/hotel/:page')
+  getRoomsByHotelId(@Param() params: any, @Query() query: any) {
+    return this.roomsService.getRoomsByHotelId(query.hotelId, params.page, query.limit);
   }
 
   @ApiOperation({
@@ -133,6 +141,10 @@ export class RoomsController {
     description: 'asc/desc',
     required: false,
   })
+  @ApiQuery({
+    name: 'limit',
+    description: 'limit of elements on the page',
+  })
   @Get('/:page')
   getAvailableRooms(@Param() params: any, @Query() query: any) {
     return this.roomsService.getAvailableRooms(query, params.page);
@@ -146,8 +158,12 @@ export class RoomsController {
     name: 'page',
     description: 'Current page'
   })
+  @ApiQuery({
+    name: 'limit',
+    description: 'limit of elements on the page',
+  })
   @Get('/all/:page')
-  getAllRooms(@Param() params: any) {
-    return this.roomsService.getAllRooms(params.page)
+  getAllRooms(@Param() params: any, @Query() query: any) {
+    return this.roomsService.getAllRooms(params.page, query.limit)
   }
 }

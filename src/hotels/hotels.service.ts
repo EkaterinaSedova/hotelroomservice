@@ -77,15 +77,14 @@ export class HotelsService {
   }
 
   async getHotels(query, page) {
-    const limit = 10;
-    const offset = page * limit - limit;
+    const offset = page * query.limit - query.limit;
     let sql = `SELECT hotels.id, hotels."name", hotels.description, hotels.star_rating, hotels.contacts
                  FROM hotels,
                       addresses
                  WHERE addresses.id = hotels.address_id`;
     if (query.country) sql += ` AND addresses.country LIKE '${query.country}'`;
     if (query.city) sql += ` AND addresses.city LIKE '${query.city}'`;
-    sql += ` LIMIT ${limit} OFFSET ${offset}`;
+    sql += ` LIMIT ${query.limit} OFFSET ${offset}`;
     return await this.sequelize.query(sql, {
       plain: false,
       type: QueryTypes.SELECT,

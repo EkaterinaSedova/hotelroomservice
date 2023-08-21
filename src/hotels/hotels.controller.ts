@@ -96,6 +96,11 @@ export class HotelsController {
     description: 'City',
     required: false,
   })
+  @ApiQuery({
+    name: 'limit',
+    description: 'limit of elements on page',
+    required: false,
+  })
   @ApiParam({
     name: 'page',
     description: 'Current page',

@@ -23,7 +23,7 @@ import { join } from 'path';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join('/resources'),
+      rootPath: join('./resources'),
     }),
     ConfigModule.forRoot({
       envFilePath: '.env',

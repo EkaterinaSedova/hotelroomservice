@@ -54,7 +54,7 @@ export class RoomsService {
   async getAvailableRooms(query, page) {
     const limit = query.limit;
     const offset = page * limit - limit;
-    let sql = `SELECT rooms.id, rooms."options", rooms.images
+    let sql = `SELECT rooms.id, rooms."options", rooms.images, rooms.hotel_id AS "hotelId"
             FROM rooms
             LEFT JOIN bookings 
 	        ON rooms.id = bookings.room_id AND (
@@ -66,6 +66,7 @@ export class RoomsService {
 	            ),
 	        addresses
             WHERE addresses.id = rooms.address_id AND bookings.id IS NULL`;
+    if(query.hotelId) sql += ` AND rooms.hotel_id = ${query.hotelId}`
     if (query.country) sql += ` AND addresses.country LIKE '${query.country}'`;
     if (query.city) sql += ` AND addresses.city LIKE '${query.city}'`;
     if (query.fridge)

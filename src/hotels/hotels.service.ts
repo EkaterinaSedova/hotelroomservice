@@ -78,7 +78,7 @@ export class HotelsService {
 
   async getHotels(query, page) {
     const offset = page * query.limit - query.limit;
-    let sql = `SELECT hotels.id, hotels."name", hotels.description, hotels.star_rating, hotels.contacts
+    let sql = `SELECT hotels.id, hotels."name", hotels.description, hotels.images, hotels.star_rating AS "starRating", hotels.contacts, addresses.country, addresses.city, addresses.address
                  FROM hotels,
                       addresses
                  WHERE addresses.id = hotels.address_id`;

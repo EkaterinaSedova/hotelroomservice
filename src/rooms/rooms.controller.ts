@@ -145,6 +145,11 @@ export class RoomsController {
     name: 'limit',
     description: 'limit of elements on the page',
   })
+  @ApiQuery({
+    name: 'hotelId',
+    description: 'hotel ID',
+    required: false,
+  })
   @Get('/:page')
   getAvailableRooms(@Param() params: any, @Query() query: any) {
     return this.roomsService.getAvailableRooms(query, params.page);

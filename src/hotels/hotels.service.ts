@@ -84,6 +84,7 @@ export class HotelsService {
                  WHERE addresses.id = hotels.address_id`;
     if (query.country) sql += ` AND addresses.country LIKE '${query.country}'`;
     if (query.city) sql += ` AND addresses.city LIKE '${query.city}'`;
+    if (query.name) sql += ` AND hotels.name LIKE '%${query.name}%'`;
     sql += ` LIMIT ${query.limit} OFFSET ${offset}`;
     return await this.sequelize.query(sql, {
       plain: false,

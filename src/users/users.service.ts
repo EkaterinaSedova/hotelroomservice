@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Op } from '@sequelize/core';
 
 @Injectable()
 export class UsersService {
@@ -52,5 +53,16 @@ export class UsersService {
         HttpStatus.BAD_REQUEST,
       );
     return { message: 'Successfully updated' };
+  }
+
+  async getUserByName(name) {
+    const user = await this.userRepository.findAll({
+      where: {
+        name: {[Op.like]: name}
+      }
+    });
+    if (!user)
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    return user;
   }
 }

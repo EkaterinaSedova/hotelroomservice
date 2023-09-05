@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiParam,
+  ApiParam, ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
@@ -57,5 +57,13 @@ export class UsersController {
   @Post('/update')
   updateUser(@Body() dto: UpdateUserDto) {
     return this.usersService.updateUsername(dto);
+  }
+
+  @ApiQuery({
+    name: 'name',
+  })
+  @Get('/')
+  getUserByName(@Query() params: any) {
+    return this.usersService.getUserByName('%' + params.name + '%');
   }
 }

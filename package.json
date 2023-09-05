@@ -28,6 +28,7 @@
     "@nestjs/sequelize": "^10.0.0",
     "@nestjs/serve-static": "^4.0.0",
     "@nestjs/swagger": "^7.1.6",
+    "@sequelize/core": "^7.0.0-alpha.27",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.14.0",
     "pg": "^8.11.2",

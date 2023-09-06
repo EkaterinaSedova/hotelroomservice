@@ -10,19 +10,22 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
-import { CreateRoomDto } from './dto/create-room.dto';
 import {
-  ApiBearerAuth,
+  ApiBadRequestResponse,
+  ApiBearerAuth, ApiBody,
   ApiConsumes,
   ApiCreatedResponse, ApiOkResponse,
   ApiOperation,
-  ApiParam, ApiQuery,
-  ApiTags,
+  ApiTags, ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Room } from './room.model';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UpdateRoomDto } from './dto/update-room.dto';
+import {
+  AvailableRoomsQueryDto,
+  CreateRoomDto, DeleteRoomParamsDto, FindRoomsInHotelQueryDto, GetAllRoomsQueryDto,
+  GetRoomParamsDto, RoomDto,
+} from "./dto/rooms.dto";
 
 @ApiTags('Room')
 @Controller('rooms')
@@ -30,7 +33,11 @@ export class RoomsController {
   constructor(private roomsService: RoomsService) {}
 
   @ApiOperation({ summary: 'Create room' })
-  @ApiCreatedResponse({ type: Room })
+  @ApiCreatedResponse({
+    description: 'Room object',
+    type: RoomDto
+  })
+  @ApiUnauthorizedResponse({description: 'Пользователь не авторизован'})
   @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
@@ -43,58 +50,59 @@ export class RoomsController {
   @ApiOperation({
     summary: 'Delete room',
   })
-  @ApiParam({
-    name: 'id',
-    description: 'Room ID',
+  @ApiOkResponse({
+    description: "Room successfully deleted"
   })
+  @ApiBadRequestResponse({description: "Room not found"})
+  @ApiUnauthorizedResponse({description: 'Пользователь не авторизован'})
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @Delete('/:id')
-  deleteRoom(@Param() params: any) {
+  deleteRoom(@Param() params: DeleteRoomParamsDto) {
     return this.roomsService.deleteRoom(params.id);
   }
 
   @ApiOperation({
     summary: 'Get room in hotel by hotel ID',
   })
-  @ApiQuery({
-    name: 'limit',
-    description: 'limit of elements on the page',
+  @ApiOkResponse({
+    description: 'Array of rooms',
+    type: RoomDto,
+    isArray: true
   })
-  @ApiQuery({
-    name: 'hotelId',
-    description: 'Hotel ID',
-  })
-  @ApiParam({
-    name: 'page',
-    description: 'Current page',
-  })
-  @Get('/hotel/:page')
-  getRoomsByHotelId(@Param() params: any, @Query() query: any) {
-    return this.roomsService.getRoomsByHotelId(query.hotelId, params.page, query.limit);
+  @Get('/hotel')
+  getRoomsByHotelId(@Query() query: FindRoomsInHotelQueryDto) {
+    return this.roomsService.getRoomsByHotelId(query);
   }
 
   @ApiOperation({
     summary: 'Update room',
   })
   @UseGuards(JwtAuthGuard)
+  @ApiBadRequestResponse({
+    description: 'Room with such ID not found'
+  })
+  @ApiOkResponse({
+    description: 'Successfully updated'
+  })
+  @ApiUnauthorizedResponse({description: 'Пользователь не авторизован'})
   @ApiBearerAuth('access-token')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('images'))
   @Post('/update')
-  updateRoom(@Body() dto: UpdateRoomDto, @UploadedFiles() images) {
+  updateRoom(@Body() dto: RoomDto, @UploadedFiles() images) {
     return this.roomsService.updateRoom(dto, images);
   }
 
   @ApiOperation({
     summary: 'Get room by ID',
   })
-  @ApiParam({
-    name: 'id',
-    description: 'Room ID',
+  @ApiOkResponse({
+    description: 'Room object',
+    type: RoomDto
   })
   @Get('/room/:id')
-  getRoom(@Param() params: any) {
+  getRoom(@Param() params: GetRoomParamsDto) {
     return this.roomsService.getRoomById(params.id);
   }
 
@@ -102,73 +110,26 @@ export class RoomsController {
     summary: 'Get available rooms',
   })
   @ApiOkResponse({
-    description: 'Success',
+    description: 'Array of rooms',
+    type: RoomDto,
+    isArray: true
   })
-  @ApiQuery({
-    name: 'inDate',
-    description: 'in date',
-  })
-  @ApiQuery({
-    name: 'outDate',
-    description: 'out date',
-  })
-  @ApiParam({
-    name: 'page',
-    description: 'Current page',
-  })
-  @ApiQuery({
-    name: 'city',
-    description: 'Current city',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'country',
-    description: 'Current country',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'places',
-    description: 'Places in room',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'fridge',
-    description: 'Is there a fridge in room? (true/false)',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'price',
-    description: 'asc/desc',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'limit',
-    description: 'limit of elements on the page',
-  })
-  @ApiQuery({
-    name: 'hotelId',
-    description: 'hotel ID',
-    required: false,
-  })
-  @Get('/:page')
-  getAvailableRooms(@Param() params: any, @Query() query: any) {
-    return this.roomsService.getAvailableRooms(query, params.page);
+  @Get('/')
+  getAvailableRooms(@Query() query: AvailableRoomsQueryDto) {
+    return this.roomsService.getAvailableRooms(query);
   }
 
 
   @ApiOperation({
     summary: 'Get all rooms'
   })
-  @ApiParam({
-    name: 'page',
-    description: 'Current page'
+  @ApiOkResponse({
+    description: 'Array of rooms',
+    type: RoomDto,
+    isArray: true
   })
-  @ApiQuery({
-    name: 'limit',
-    description: 'limit of elements on the page',
-  })
-  @Get('/all/:page')
-  getAllRooms(@Param() params: any, @Query() query: any) {
-    return this.roomsService.getAllRooms(params.page, query.limit)
+  @Get('/all')
+  getAllRooms(@Query() query: GetAllRoomsQueryDto) {
+    return this.roomsService.getAllRooms(query)
   }
 }

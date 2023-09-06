@@ -1,11 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Room } from './room.model';
-import { CreateRoomDto } from './dto/create-room.dto';
+import {CreateRoomDto, RoomDto} from './dto/rooms.dto';
 import { Hotel } from '../hotels/hotel.model';
 import { FilesService } from '../files/files.service';
 import { Booking } from '../bookings/booking.model';
-import { UpdateRoomDto } from './dto/update-room.dto';
 import {QueryTypes} from "sequelize";
 import {Sequelize} from "sequelize-typescript";
 
@@ -51,9 +50,9 @@ export class RoomsService {
     return this.roomRepository.findByPk(id, { include: { all: true } });
   }
 
-  async getAvailableRooms(query, page) {
+  async getAvailableRooms(query) {
     const limit = query.limit;
-    const offset = page * limit - limit;
+    const offset = query.page * limit - limit;
     let sql = `SELECT rooms.id, rooms."options", rooms.images, rooms.hotel_id AS "hotelId"
             FROM rooms
             LEFT JOIN bookings 
@@ -87,21 +86,21 @@ export class RoomsService {
     });
   }
 
-  async getAllRooms(page, limit) {
-    const offset = limit * page - limit;
-    return this.roomRepository.findAll({limit, offset, include: {all: true}});
+  async getAllRooms(query) {
+    const offset = query.limit * query.page - query.limit;
+    return this.roomRepository.findAll({limit: query.limit, offset, include: {all: true}});
   }
 
-  async getRoomsByHotelId(hotelId, page, limit) {
-    const offset = limit * page - limit;
-    return await this.roomRepository.findAll({ limit, offset, where: { hotelId } });
+  async getRoomsByHotelId(query) {
+    const offset = query.limit * query.page - query.limit;
+    return await this.roomRepository.findAll({ limit: query.limit, offset, where: { hotelId: query.hotelId } });
   }
 
-  async updateRoom(dto: UpdateRoomDto, images: any[]) {
+  async updateRoom(dto: RoomDto, images: any[]) {
     const candidate = await this.roomRepository.findByPk(dto.id);
     if (!candidate)
       throw new HttpException(
-        'Address with such ID not found',
+        'Room with such ID not found',
         HttpStatus.BAD_REQUEST,
       );
     let fileNames = [];

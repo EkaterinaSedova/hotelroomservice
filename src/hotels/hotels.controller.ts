@@ -4,7 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Post, Query,
+  Post,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -16,14 +17,18 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiParam, ApiQuery,
-  ApiTags, ApiUnauthorizedResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { HotelsService } from './hotels.service';
-import { Hotel } from './hotel.model';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import {CreateHotelDto, GetHotelsQueryDto, HotelDto, HotelParamsDto} from "./dto/hotels.dto";
+import {
+  CreateHotelDto,
+  GetHotelsQueryDto,
+  HotelDto,
+  HotelParamsDto,
+} from './dto/hotels.dto';
 
 @ApiTags('Hotel')
 @Controller('hotels')
@@ -59,13 +64,13 @@ export class HotelsController {
     summary: 'Delete hotel',
   })
   @ApiOkResponse({
-    description: 'Hotel successfully deleted'
+    description: 'Hotel successfully deleted',
   })
   @ApiBadRequestResponse({
-    description: 'Hotel not found'
+    description: 'Hotel not found',
   })
   @ApiUnauthorizedResponse({
-    description: 'Пользователь не авторизован'
+    description: 'Пользователь не авторизован',
   })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
@@ -76,13 +81,13 @@ export class HotelsController {
 
   @ApiOperation({ summary: 'Update hotel' })
   @ApiOkResponse({
-    description: 'Successfully updated'
+    description: 'Successfully updated',
   })
   @ApiBadRequestResponse({
-    description: 'Hotel with such ID not found'
+    description: 'Hotel with such ID not found',
   })
   @ApiUnauthorizedResponse({
-    description: 'Пользователь не авторизован'
+    description: 'Пользователь не авторизован',
   })
   @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAuthGuard)

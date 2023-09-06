@@ -4,9 +4,9 @@ import { Hotel } from './hotel.model';
 import { Room } from '../rooms/room.model';
 import { FilesService } from '../files/files.service';
 import { Booking } from '../bookings/booking.model';
-import {QueryTypes} from "sequelize";
-import {Sequelize} from "sequelize-typescript";
-import {CreateHotelDto, HotelDto} from "./dto/hotels.dto";
+import { QueryTypes } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
+import { CreateHotelDto, HotelDto } from './dto/hotels.dto';
 
 @Injectable()
 export class HotelsService {
@@ -15,7 +15,7 @@ export class HotelsService {
     @InjectModel(Room) private roomRepository: typeof Room,
     @InjectModel(Booking) private bookingRepository: typeof Booking,
     private fileService: FilesService,
-    private sequelize: Sequelize
+    private sequelize: Sequelize,
   ) {}
 
   async createHotel(dto: CreateHotelDto, images: any[]) {

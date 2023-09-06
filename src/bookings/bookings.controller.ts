@@ -10,13 +10,13 @@ import {
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiCreatedResponse, ApiOkResponse,
+  ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
-  ApiParam,
-  ApiTags, ApiUnauthorizedResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { BookingsService } from './bookings.service';
-import { Booking } from './booking.model';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   BookingDto,
@@ -24,12 +24,12 @@ import {
   CreateBookingDto,
   HotelIdParamDto,
   RoomIdParamDto,
-  UserIdParamDto
-} from "./dto/bookings.dto";
+  UserIdParamDto,
+} from './dto/bookings.dto';
 
 @ApiTags('Booking')
 @ApiUnauthorizedResponse({
-  description: 'Пользователь не авторизован'
+  description: 'Пользователь не авторизован',
 })
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('access-token')
@@ -40,7 +40,7 @@ export class BookingsController {
   @ApiOperation({ summary: 'Create booking' })
   @ApiCreatedResponse({
     description: 'Booking object',
-    type: BookingDto
+    type: BookingDto,
   })
   @Post()
   createBooking(@Body() dto: CreateBookingDto) {
@@ -51,10 +51,10 @@ export class BookingsController {
     summary: 'Delete booking',
   })
   @ApiOkResponse({
-    description: 'Booking successfully deleted'
+    description: 'Booking successfully deleted',
   })
   @ApiBadRequestResponse({
-    description: 'Booking not found'
+    description: 'Booking not found',
   })
   @Delete('/:id')
   deleteBooking(@Param() params: BookingIdParamDto) {
@@ -67,7 +67,7 @@ export class BookingsController {
   @ApiOkResponse({
     description: 'Array of bookings',
     type: BookingDto,
-    isArray: true
+    isArray: true,
   })
   @Get('/hotel/:id')
   getBookingsByHotel(@Param() params: HotelIdParamDto) {
@@ -93,7 +93,7 @@ export class BookingsController {
   @ApiOkResponse({
     description: 'Array of bookings',
     type: BookingDto,
-    isArray: true
+    isArray: true,
   })
   @Get('/user/:id')
   getBookingsOfUser(@Param() params: UserIdParamDto) {

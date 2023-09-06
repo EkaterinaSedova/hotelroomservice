@@ -13,17 +13,21 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiTags, ApiUnauthorizedResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Address } from './address.model';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import {AddressDto, AddressParamsDto, CreateAddressDto} from "./dto/addresses.dto";
+import {
+  AddressDto,
+  AddressParamsDto,
+  CreateAddressDto,
+} from './dto/addresses.dto';
 
 @ApiTags('Address')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('access-token')
 @ApiUnauthorizedResponse({
-  description: 'Пользователь не авторизован'
+  description: 'Пользователь не авторизован',
 })
 @Controller('address')
 export class AddressController {
@@ -34,7 +38,7 @@ export class AddressController {
   })
   @ApiCreatedResponse({
     description: 'Address object',
-    type: AddressDto
+    type: AddressDto,
   })
   @Post()
   create(@Body() dto: CreateAddressDto) {
@@ -45,10 +49,10 @@ export class AddressController {
     summary: 'Delete address by address ID',
   })
   @ApiOkResponse({
-    description:  'Successfully deleted'
+    description: 'Successfully deleted',
   })
   @ApiBadRequestResponse({
-    description: 'Address not found'
+    description: 'Address not found',
   })
   @Delete('/:id')
   deleteAddress(@Param() params: AddressParamsDto) {
@@ -59,10 +63,10 @@ export class AddressController {
     summary: 'Update address',
   })
   @ApiOkResponse({
-    description: 'Successfully updated'
+    description: 'Successfully updated',
   })
   @ApiBadRequestResponse({
-    description: 'Address with such ID not found'
+    description: 'Address with such ID not found',
   })
   @Post('/update')
   updateAddress(@Body() dto: AddressDto) {

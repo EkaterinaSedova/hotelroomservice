@@ -11,19 +11,20 @@ import { FeedbacksService } from './feedbacks.service';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiCreatedResponse, ApiOkResponse,
+  ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
-  ApiTags, ApiUnauthorizedResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Feedback } from './feedback.model';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   AverageRatingDto,
   CreateFeedbackDto,
   DeleteFeedbackParamsDto,
   FeedbackDto,
-  HotelIdParam
-} from "./dto/feedback.dto";
+  HotelIdParam,
+} from './dto/feedback.dto';
 
 @ApiTags('Feedback')
 @Controller('feedbacks')
@@ -33,10 +34,10 @@ export class FeedbacksController {
   @ApiOperation({ summary: 'Create feedback' })
   @ApiCreatedResponse({
     description: 'Feedback object',
-    type: FeedbackDto
+    type: FeedbackDto,
   })
   @ApiUnauthorizedResponse({
-    description: 'Пользователь не авторизован'
+    description: 'Пользователь не авторизован',
   })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
@@ -47,13 +48,13 @@ export class FeedbacksController {
 
   @ApiOperation({ summary: 'Delete feedback' })
   @ApiBadRequestResponse({
-    description: 'Feedback not found'
+    description: 'Feedback not found',
   })
   @ApiOkResponse({
-    description: 'Feedback successfully deleted'
+    description: 'Feedback successfully deleted',
   })
   @ApiUnauthorizedResponse({
-    description: 'Пользователь не авторизован'
+    description: 'Пользователь не авторизован',
   })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
@@ -65,7 +66,7 @@ export class FeedbacksController {
   @ApiOperation({ summary: 'Get average rating of hotel' })
   @ApiOkResponse({
     description: 'average rating of hotel',
-    type: AverageRatingDto
+    type: AverageRatingDto,
   })
   @Get('/avg/:hotelId')
   getAverageRating(@Param() params: HotelIdParam) {
@@ -85,13 +86,13 @@ export class FeedbacksController {
 
   @ApiOperation({ summary: 'Update feedback' })
   @ApiOkResponse({
-    description: 'Successfully updated'
+    description: 'Successfully updated',
   })
   @ApiBadRequestResponse({
-    description: 'Feedback with such ID not found'
+    description: 'Feedback with such ID not found',
   })
   @ApiUnauthorizedResponse({
-    description: 'Пользователь не авторизован'
+    description: 'Пользователь не авторизован',
   })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')

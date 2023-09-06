@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Address } from './address.model';
 import { Room } from '../rooms/room.model';
 import { Hotel } from '../hotels/hotel.model';
-import {AddressDto, CreateAddressDto} from "./dto/addresses.dto";
+import { AddressDto, CreateAddressDto } from './dto/addresses.dto';
 
 @Injectable()
 export class AddressService {
@@ -17,8 +17,6 @@ export class AddressService {
     return await this.addressRepository.create(dto);
   }
 
-
-
   async deleteAddress(id) {
     const addressId = id;
     const address = await this.addressRepository.destroy({ where: { id } });
@@ -28,8 +26,6 @@ export class AddressService {
       throw new HttpException('Address not found', HttpStatus.BAD_REQUEST);
     return { message: 'Address successfully deleted' };
   }
-
-
 
   async updateAddress(dto: AddressDto) {
     const candidate = await this.addressRepository.findByPk(dto.id);

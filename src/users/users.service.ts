@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
 import { Op } from '@sequelize/core';
-import {CreateUserDto, UpdateUserDto} from "./dto/user.dto";
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -57,8 +57,8 @@ export class UsersService {
   async getUserByName(name) {
     const user = await this.userRepository.findAll({
       where: {
-        name: {[Op.like]: name}
-      }
+        name: { [Op.like]: name },
+      },
     });
     if (!user)
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);

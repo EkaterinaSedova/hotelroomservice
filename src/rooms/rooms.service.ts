@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Room } from './room.model';
-import {CreateRoomDto, RoomDto} from './dto/rooms.dto';
+import { CreateRoomDto, RoomDto } from './dto/rooms.dto';
 import { Hotel } from '../hotels/hotel.model';
 import { FilesService } from '../files/files.service';
 import { Booking } from '../bookings/booking.model';
-import {QueryTypes} from "sequelize";
-import {Sequelize} from "sequelize-typescript";
+import { QueryTypes } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class RoomsService {
@@ -65,7 +65,7 @@ export class RoomsService {
 	            ),
 	        addresses
             WHERE addresses.id = rooms.address_id AND bookings.id IS NULL`;
-    if(query.hotelId) sql += ` AND rooms.hotel_id = ${query.hotelId}`
+    if (query.hotelId) sql += ` AND rooms.hotel_id = ${query.hotelId}`;
     if (query.country) sql += ` AND addresses.country LIKE '${query.country}'`;
     if (query.city) sql += ` AND addresses.city LIKE '${query.city}'`;
     if (query.fridge)
@@ -88,12 +88,20 @@ export class RoomsService {
 
   async getAllRooms(query) {
     const offset = query.limit * query.page - query.limit;
-    return this.roomRepository.findAll({limit: query.limit, offset, include: {all: true}});
+    return this.roomRepository.findAll({
+      limit: query.limit,
+      offset,
+      include: { all: true },
+    });
   }
 
   async getRoomsByHotelId(query) {
     const offset = query.limit * query.page - query.limit;
-    return await this.roomRepository.findAll({ limit: query.limit, offset, where: { hotelId: query.hotelId } });
+    return await this.roomRepository.findAll({
+      limit: query.limit,
+      offset,
+      where: { hotelId: query.hotelId },
+    });
   }
 
   async updateRoom(dto: RoomDto, images: any[]) {

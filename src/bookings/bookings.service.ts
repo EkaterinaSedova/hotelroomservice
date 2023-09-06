@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Booking } from './booking.model';
-import {CreateBookingDto} from "./dto/bookings.dto";
+import { CreateBookingDto } from './dto/bookings.dto';
 
 @Injectable()
 export class BookingsService {

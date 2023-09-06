@@ -1,14 +1,18 @@
-import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { User } from './user.model';
-import {ChangeUserroleDto, GetUserParamsDto, GetUserQueryDto, UpdateUserDto, UserDto} from "./dto/user.dto";
+import {
+  ChangeUserroleDto,
+  GetUserParamsDto,
+  GetUserQueryDto,
+  UpdateUserDto,
+  UserDto,
+} from './dto/user.dto';
 
 @ApiTags('User')
 @Controller('users')
@@ -34,10 +38,10 @@ export class UsersController {
     summary: 'Change role of User with current ID',
   })
   @ApiOkResponse({
-    description: 'Successfully updated'
+    description: 'Successfully updated',
   })
   @ApiBadRequestResponse({
-    description: 'User with such ID not found'
+    description: 'User with such ID not found',
   })
   @Post('/changeRole')
   changeRole(@Body() dto: ChangeUserroleDto) {
@@ -48,19 +52,18 @@ export class UsersController {
     summary: 'Update username',
   })
   @ApiOkResponse({
-    description: 'Successfully updated'
+    description: 'Successfully updated',
   })
   @ApiBadRequestResponse({
-    description: 'User with such ID not found'
+    description: 'User with such ID not found',
   })
   @Post('/update')
   updateUser(@Body() dto: UpdateUserDto) {
     return this.usersService.updateUsername(dto);
   }
 
-
   @ApiOperation({
-    summary: 'Get user by name'
+    summary: 'Get user by name',
   })
   @ApiOkResponse({
     description: 'Array of users',
@@ -68,7 +71,7 @@ export class UsersController {
     isArray: true,
   })
   @ApiBadRequestResponse({
-    description: 'User not found'
+    description: 'User not found',
   })
   @Get('/')
   getUserByName(@Query() params: GetUserQueryDto) {

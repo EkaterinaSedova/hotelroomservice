@@ -4,7 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Post, Query,
+  Post,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -12,20 +13,25 @@ import {
 import { RoomsService } from './rooms.service';
 import {
   ApiBadRequestResponse,
-  ApiBearerAuth, ApiBody,
+  ApiBearerAuth,
   ApiConsumes,
-  ApiCreatedResponse, ApiOkResponse,
+  ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
-  ApiTags, ApiUnauthorizedResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Room } from './room.model';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   AvailableRoomsQueryDto,
-  CreateRoomDto, DeleteRoomParamsDto, FindRoomsInHotelQueryDto, GetAllRoomsQueryDto,
-  GetRoomParamsDto, RoomDto,
-} from "./dto/rooms.dto";
+  CreateRoomDto,
+  DeleteRoomParamsDto,
+  FindRoomsInHotelQueryDto,
+  GetAllRoomsQueryDto,
+  GetRoomParamsDto,
+  RoomDto,
+} from './dto/rooms.dto';
 
 @ApiTags('Room')
 @Controller('rooms')
@@ -35,9 +41,9 @@ export class RoomsController {
   @ApiOperation({ summary: 'Create room' })
   @ApiCreatedResponse({
     description: 'Room object',
-    type: RoomDto
+    type: RoomDto,
   })
-  @ApiUnauthorizedResponse({description: 'Пользователь не авторизован'})
+  @ApiUnauthorizedResponse({ description: 'Пользователь не авторизован' })
   @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
@@ -51,10 +57,10 @@ export class RoomsController {
     summary: 'Delete room',
   })
   @ApiOkResponse({
-    description: "Room successfully deleted"
+    description: 'Room successfully deleted',
   })
-  @ApiBadRequestResponse({description: "Room not found"})
-  @ApiUnauthorizedResponse({description: 'Пользователь не авторизован'})
+  @ApiBadRequestResponse({ description: 'Room not found' })
+  @ApiUnauthorizedResponse({ description: 'Пользователь не авторизован' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @Delete('/:id')
@@ -68,7 +74,7 @@ export class RoomsController {
   @ApiOkResponse({
     description: 'Array of rooms',
     type: RoomDto,
-    isArray: true
+    isArray: true,
   })
   @Get('/hotel')
   getRoomsByHotelId(@Query() query: FindRoomsInHotelQueryDto) {
@@ -80,12 +86,12 @@ export class RoomsController {
   })
   @UseGuards(JwtAuthGuard)
   @ApiBadRequestResponse({
-    description: 'Room with such ID not found'
+    description: 'Room with such ID not found',
   })
   @ApiOkResponse({
-    description: 'Successfully updated'
+    description: 'Successfully updated',
   })
-  @ApiUnauthorizedResponse({description: 'Пользователь не авторизован'})
+  @ApiUnauthorizedResponse({ description: 'Пользователь не авторизован' })
   @ApiBearerAuth('access-token')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('images'))
@@ -99,7 +105,7 @@ export class RoomsController {
   })
   @ApiOkResponse({
     description: 'Room object',
-    type: RoomDto
+    type: RoomDto,
   })
   @Get('/room/:id')
   getRoom(@Param() params: GetRoomParamsDto) {
@@ -112,24 +118,23 @@ export class RoomsController {
   @ApiOkResponse({
     description: 'Array of rooms',
     type: RoomDto,
-    isArray: true
+    isArray: true,
   })
   @Get('/')
   getAvailableRooms(@Query() query: AvailableRoomsQueryDto) {
     return this.roomsService.getAvailableRooms(query);
   }
 
-
   @ApiOperation({
-    summary: 'Get all rooms'
+    summary: 'Get all rooms',
   })
   @ApiOkResponse({
     description: 'Array of rooms',
     type: RoomDto,
-    isArray: true
+    isArray: true,
   })
   @Get('/all')
   getAllRooms(@Query() query: GetAllRoomsQueryDto) {
-    return this.roomsService.getAllRooms(query)
+    return this.roomsService.getAllRooms(query);
   }
 }

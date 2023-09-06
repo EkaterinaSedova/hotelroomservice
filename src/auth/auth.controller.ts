@@ -1,6 +1,4 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { LoginUserDto } from '../users/dto/login-user.dto';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import {
   ApiBadRequestResponse,
@@ -10,6 +8,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import {AuthResponse, CreateUserDto, LoginUserDto} from "../users/dto/user.dto";
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -21,10 +20,11 @@ export class AuthController {
   })
   @ApiResponse({
     status: 201,
-    description: 'Success',
+    description: 'Token',
+    type: AuthResponse
   })
   @ApiUnauthorizedResponse({
-    description: 'Bad request',
+    description: 'Некорректный login/Некорректный пароль',
   })
   @Post('/login')
   login(@Body() userDto: LoginUserDto) {
@@ -35,10 +35,11 @@ export class AuthController {
     summary: 'Register user',
   })
   @ApiOkResponse({
-    description: 'Success',
+    description: 'Token',
+    type: AuthResponse
   })
   @ApiBadRequestResponse({
-    description: 'Bad request',
+    description: 'Пользователь с таким email уже существует',
   })
   @Post('/registration')
   registration(@Body() userDto: CreateUserDto) {

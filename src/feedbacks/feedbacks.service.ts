@@ -1,10 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Feedback } from './feedback.model';
-import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { Sequelize } from 'sequelize-typescript';
 import { QueryTypes } from 'sequelize';
-import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import {CreateFeedbackDto, FeedbackDto} from "./dto/feedback.dto";
 
 @Injectable()
 export class FeedbacksService {
@@ -45,7 +44,7 @@ export class FeedbacksService {
     });
   }
 
-  async updateFeedback(dto: UpdateFeedbackDto) {
+  async updateFeedback(dto: FeedbackDto) {
     const candidate = await this.feedbackRepository.findByPk(dto.id);
     if (!candidate)
       throw new HttpException(

@@ -1,12 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Address } from './address.model';
-import { CreateAddressDto } from './dto/create-address.dto';
 import { Room } from '../rooms/room.model';
-import { Sequelize } from 'sequelize-typescript';
-import { QueryTypes } from 'sequelize';
 import { Hotel } from '../hotels/hotel.model';
-import { UpdateAddressDto } from './dto/update-address.dto';
+import {AddressDto, CreateAddressDto} from "./dto/addresses.dto";
 
 @Injectable()
 export class AddressService {
@@ -34,7 +31,7 @@ export class AddressService {
 
 
 
-  async updateAddress(dto: UpdateAddressDto) {
+  async updateAddress(dto: AddressDto) {
     const candidate = await this.addressRepository.findByPk(dto.id);
     if (!candidate)
       throw new HttpException(

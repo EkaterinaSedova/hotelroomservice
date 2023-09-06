@@ -2,28 +2,29 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   Param,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiTags,
+  ApiTags, ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Address } from './address.model';
-import { CreateAddressDto } from './dto/create-address.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UpdateAddressDto } from './dto/update-address.dto';
+import {AddressDto, AddressParamsDto, CreateAddressDto} from "./dto/addresses.dto";
 
 @ApiTags('Address')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('access-token')
+@ApiUnauthorizedResponse({
+  description: 'Пользователь не авторизован'
+})
 @Controller('address')
 export class AddressController {
   constructor(private addressesService: AddressService) {}
@@ -31,9 +32,10 @@ export class AddressController {
   @ApiOperation({
     summary: 'Create address',
   })
-  @ApiCreatedResponse({ type: Address })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
+  @ApiCreatedResponse({
+    description: 'Address object',
+    type: AddressDto
+  })
   @Post()
   create(@Body() dto: CreateAddressDto) {
     return this.addressesService.createAddress(dto);
@@ -42,20 +44,28 @@ export class AddressController {
   @ApiOperation({
     summary: 'Delete address by address ID',
   })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
+  @ApiOkResponse({
+    description:  'Successfully deleted'
+  })
+  @ApiBadRequestResponse({
+    description: 'Address not found'
+  })
   @Delete('/:id')
-  deleteAddress(@Param() params: any) {
+  deleteAddress(@Param() params: AddressParamsDto) {
     return this.addressesService.deleteAddress(params.id);
   }
 
   @ApiOperation({
     summary: 'Update address',
   })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
+  @ApiOkResponse({
+    description: 'Successfully updated'
+  })
+  @ApiBadRequestResponse({
+    description: 'Address with such ID not found'
+  })
   @Post('/update')
-  updateAddress(@Body() dto: UpdateAddressDto) {
+  updateAddress(@Body() dto: AddressDto) {
     return this.addressesService.updateAddress(dto);
   }
 }

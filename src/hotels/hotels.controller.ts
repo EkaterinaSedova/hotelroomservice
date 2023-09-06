@@ -17,21 +17,20 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam, ApiQuery,
-  ApiTags,
+  ApiTags, ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { HotelsService } from './hotels.service';
 import { Hotel } from './hotel.model';
-import { CreateHotelDto } from './dto/create-hotel.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UpdateHotelDto } from './dto/update-hotel.dto';
+import {CreateHotelDto, GetHotelsQueryDto, HotelDto, HotelParamsDto} from "./dto/hotels.dto";
 
 @ApiTags('Hotel')
 @Controller('hotels')
 export class HotelsController {
   constructor(private hotelsService: HotelsService) {}
   @ApiOperation({ summary: 'Create hotel' })
-  @ApiCreatedResponse({ type: Hotel })
+  @ApiCreatedResponse({ description: 'Hotel object', type: HotelDto })
   @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
@@ -45,73 +44,65 @@ export class HotelsController {
     summary: 'Get hotel by ID',
   })
   @ApiOkResponse({
-    description: 'Success',
+    description: 'Hotel object',
+    type: HotelDto,
   })
   @ApiBadRequestResponse({
-    description: 'Bad request: hotel not found',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'Gets the hotel id',
+    description: 'Hotel not found',
   })
   @Get('/hotel/:id')
-  getHotelById(@Param() params: any) {
+  getHotelById(@Param() params: HotelParamsDto) {
     return this.hotelsService.getHotelById(params.id);
   }
 
   @ApiOperation({
     summary: 'Delete hotel',
   })
-  @ApiParam({
-    name: 'id',
-    description: 'Hotel ID',
+  @ApiOkResponse({
+    description: 'Hotel successfully deleted'
+  })
+  @ApiBadRequestResponse({
+    description: 'Hotel not found'
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Пользователь не авторизован'
   })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @Delete('/:id')
-  deleteHotel(@Param() params: any) {
+  deleteHotel(@Param() params: HotelParamsDto) {
     return this.hotelsService.deleteHotel(params.id);
   }
 
   @ApiOperation({ summary: 'Update hotel' })
+  @ApiOkResponse({
+    description: 'Successfully updated'
+  })
+  @ApiBadRequestResponse({
+    description: 'Hotel with such ID not found'
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Пользователь не авторизован'
+  })
   @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @UseInterceptors(FilesInterceptor('images'))
   @Post('/update')
-  updateHotel(@Body() dto: UpdateHotelDto, @UploadedFiles() images) {
+  updateHotel(@Body() dto: HotelDto, @UploadedFiles() images) {
     return this.hotelsService.updateHotel(dto, images);
   }
 
   @ApiOperation({
     summary: 'Get hotels',
   })
-  @ApiQuery({
-    name: 'country',
-    description: 'Country',
-    required: false,
+  @ApiOkResponse({
+    description: 'Array of hotels',
+    type: HotelDto,
+    isArray: true,
   })
-  @ApiQuery({
-    name: 'city',
-    description: 'City',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'limit',
-    description: 'limit of elements on page',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'name',
-    description: 'name of the hotel',
-    required: false,
-  })
-  @ApiParam({
-    name: 'page',
-    description: 'Current page',
-  })
-  @Get('/:page')
-  getHotels(@Param() params: any, @Query() query: any) {
-    return this.hotelsService.getHotels(query, params.page);
+  @Get('/')
+  getHotels(@Query() query: GetHotelsQueryDto) {
+    return this.hotelsService.getHotels(query);
   }
 }

@@ -1,13 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Hotel } from './hotel.model';
-import { CreateHotelDto } from './dto/create-hotel.dto';
 import { Room } from '../rooms/room.model';
 import { FilesService } from '../files/files.service';
 import { Booking } from '../bookings/booking.model';
-import { UpdateHotelDto } from './dto/update-hotel.dto';
 import {QueryTypes} from "sequelize";
 import {Sequelize} from "sequelize-typescript";
+import {CreateHotelDto, HotelDto} from "./dto/hotels.dto";
 
 @Injectable()
 export class HotelsService {
@@ -51,7 +50,7 @@ export class HotelsService {
     return { message: 'Hotel successfully deleted' };
   }
 
-  async updateHotel(dto: UpdateHotelDto, images: any[]) {
+  async updateHotel(dto: HotelDto, images: any[]) {
     let fileNames = [];
     for (let i = 0; i < images.length; i++) {
       fileNames.push(await this.fileService.createImage(images[i]));
@@ -76,8 +75,8 @@ export class HotelsService {
     return { message: 'Successfully updated' };
   }
 
-  async getHotels(query, page) {
-    const offset = page * query.limit - query.limit;
+  async getHotels(query) {
+    const offset = query.page * query.limit - query.limit;
     let sql = `SELECT hotels.id, hotels."name", hotels.description, hotels.images, hotels.star_rating AS "starRating", hotels.contacts, addresses.country, addresses.city, addresses.address
                  FROM hotels,
                       addresses

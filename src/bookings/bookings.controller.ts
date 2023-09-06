@@ -8,18 +8,29 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiCreatedResponse,
+  ApiCreatedResponse, ApiOkResponse,
   ApiOperation,
   ApiParam,
-  ApiTags,
+  ApiTags, ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { BookingsService } from './bookings.service';
 import { Booking } from './booking.model';
-import { CreateBookingDto } from './dto/create-booking.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import {
+  BookingDto,
+  BookingIdParamDto,
+  CreateBookingDto,
+  HotelIdParamDto,
+  RoomIdParamDto,
+  UserIdParamDto
+} from "./dto/bookings.dto";
 
 @ApiTags('Booking')
+@ApiUnauthorizedResponse({
+  description: 'Пользователь не авторизован'
+})
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('access-token')
 @Controller('bookings')
@@ -27,7 +38,10 @@ export class BookingsController {
   constructor(private bookingsService: BookingsService) {}
 
   @ApiOperation({ summary: 'Create booking' })
-  @ApiCreatedResponse({ type: Booking })
+  @ApiCreatedResponse({
+    description: 'Booking object',
+    type: BookingDto
+  })
   @Post()
   createBooking(@Body() dto: CreateBookingDto) {
     return this.bookingsService.createBooking(dto);
@@ -36,48 +50,53 @@ export class BookingsController {
   @ApiOperation({
     summary: 'Delete booking',
   })
-  @ApiParam({
-    name: 'id',
-    description: 'Booking ID',
+  @ApiOkResponse({
+    description: 'Booking successfully deleted'
+  })
+  @ApiBadRequestResponse({
+    description: 'Booking not found'
   })
   @Delete('/:id')
-  deleteBooking(@Param() params: any) {
+  deleteBooking(@Param() params: BookingIdParamDto) {
     return this.bookingsService.deleteBooking(params.id);
   }
 
   @ApiOperation({
     summary: 'Get bookings in current hotel',
   })
-  @ApiParam({
-    name: 'id',
-    description: 'Hotel ID',
+  @ApiOkResponse({
+    description: 'Array of bookings',
+    type: BookingDto,
+    isArray: true
   })
   @Get('/hotel/:id')
-  getBookingsByHotel(@Param() params: any) {
+  getBookingsByHotel(@Param() params: HotelIdParamDto) {
     return this.bookingsService.getBookingsByHotelId(params.id);
   }
 
   @ApiOperation({
     summary: 'Get bookings in current room',
   })
-  @ApiParam({
-    name: 'id',
-    description: 'Room ID',
+  @ApiOkResponse({
+    description: 'Array of bookings',
+    type: BookingDto,
+    isArray: true,
   })
   @Get('/room/:id')
-  getBookingsByRoom(@Param() params: any) {
+  getBookingsByRoom(@Param() params: RoomIdParamDto) {
     return this.bookingsService.getBookingsByRoomId(params.id);
   }
 
   @ApiOperation({
     summary: "Get bookings of user by user's ID",
   })
-  @ApiParam({
-    name: 'id',
-    description: 'User ID',
+  @ApiOkResponse({
+    description: 'Array of bookings',
+    type: BookingDto,
+    isArray: true
   })
   @Get('/user/:id')
-  getBookingsOfUser(@Param() params: any) {
+  getBookingsOfUser(@Param() params: UserIdParamDto) {
     return this.bookingsService.getBookingsOfUser(params.id);
   }
 }

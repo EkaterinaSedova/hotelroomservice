@@ -1,0 +1,31 @@
+version: '3.0'
+
+services:
+  main:
+    container_name: main
+    build:
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - .:/hotelservice-be
+      - /hotelservice-be/node_modules
+    ports:
+      - "80:80"
+    links:
+      - postgres
+    depends_on: [postgres]
+    restart: always
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    env_file:
+      - .env
+    environment:
+      PG_DATA: /var/lib/postgresql/data
+      DATABASE_URL: "postgres://postgres:2NBppDrV@postgres:5432/hotel"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    restart: always
